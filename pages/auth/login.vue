@@ -1,13 +1,16 @@
 <template lang="">
-   <div class="login-container">
-    <h2>Login Admin</h2>
+<div class="flex flex-col items-center justify-center h-screen ">
+  <div class="flex flex-col items-center justify-center bg-slate-50 rounded-lg p-4">
+    <h2 class="text-2xl font-bold mb-4">Login Admin</h2>
     <form @submit.prevent="onLogin">
       <input v-model="email" type="text"  placeholder="Username" required />
       <input v-model="password" type="password" defaultvalue="12345678" placeholder="Password" required />
       <button type="submit">Login</button>
+      <UButton>Button</UButton>
       <p v-if="error" class="error">{{ error }}</p>
     </form>
   </div>
+</div>
 </template>
 <script setup>
 import { useAuth } from '@/composables/useAuth';
