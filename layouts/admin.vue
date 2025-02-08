@@ -4,6 +4,7 @@
       <nav>
         <NuxtLink to="/admin">Dashboard</NuxtLink>
         <NuxtLink to="/admin/settings">Settings</NuxtLink>
+        <button @click="handleLogout">Logout</button>
       </nav>
     </aside>
     <main>
@@ -13,6 +14,17 @@
 </template>
 
 <script setup>
+import { useAuth } from '@/composables/useAuth';
+import { useRouter } from 'vue-router';
+
+const { logout } = useAuth();
+const router = useRouter();
+
+const handleLogout = async () => {
+  await logout();
+  alert('Logout berhasil!');
+  router.replace('/auth/login');
+};
 </script>
 
 <style scoped>
@@ -23,6 +35,7 @@
 aside {
   width: 200px;
   background-color: #f5f5f5;
+  padding: 20px;
 }
 
 main {

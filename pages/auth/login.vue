@@ -20,7 +20,7 @@ const password = ref('12345678');
 const onLogin = async () => {
   const success = await doLogin(email.value, password.value);
   if (success) {
-    router.push('/admin');
+    router.replace('/admin');
   }
 };
 
