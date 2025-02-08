@@ -8,6 +8,7 @@ export default defineNuxtPlugin(() => {
     timeout: 10000,
     headers: {
       "Content-Type": "application/json",
+      Accept: "application/json",
     },
   });
 

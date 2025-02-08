@@ -1,7 +1,11 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const { isAuthenticated } = useAuth();
+import { useLocalStorage } from "@vueuse/core";
 
-  if (!isAuthenticated.value && to.path.startsWith("/admin")) {
+export default defineNuxtRouteMiddleware((to, from) => {
+  const token = useLocalStorage("auth_token", null);
+
+  if (token.value && to.path === "/auth/login") {
+    return navigateTo("/admin");
+  } else if (!token.value && to.path !== "/auth/login") {
     return navigateTo("/auth/login");
   }
 });
