@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   // devtools: { enabled: true },
   ssr: false,
   modules: ["@nuxt/ui", "@nuxtjs/tailwindcss"],
+  imports: {
+    autoImport: true,
+  },
   // ui: {
   //   primary: "blue",
   //   gray: "cool",
@@ -13,6 +16,9 @@ export default defineNuxtConfig({
   //   fallback: "light",
   //   classSuffix: "",
   // },
+  typescript: {
+    typeCheck: true,
+  },
   tailwindcss: {
     // exposeConfig: true,
     config: {

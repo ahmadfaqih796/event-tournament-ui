@@ -12,7 +12,6 @@
   <UFormGroup label="Email" name="email">
     <UInput v-model="email" type="text" placeholder="Username" required />
   </UFormGroup>
-
   <UFormGroup label="Password" name="password">
     <UInput v-model="password" type="password" defaultvalue="12345678" placeholder="Password" required />
   </UFormGroup>
