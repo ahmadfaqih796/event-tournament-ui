@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers\api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Event;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class EventController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('can:authorization')->except(['index', 'show']);
+    }
+
+    public function index()
+    {
+        $events = Event::with('createdBy')->get();
+        return response()->json($events);
+    }
+
+    public function show($id)
+    {
+        $event = Event::with('createdBy')->find($id);
+        if (!$event) {
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+        return response()->json($event);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'location' => 'required|string|max:255'
+        ]);
+
+        $event = Event::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'location' => $request->location,
+            'created_by' => Auth::id(),
+        ]);
+
+        return response()->json(['message' => 'Event created successfully', 'event' => $event], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $event = Event::find($id);
+        if (!$event) {
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'location' => 'required|string|max:255'
+        ]);
+
+        $event->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'location' => $request->location,
+        ]);
+
+        return response()->json(['message' => 'Event updated successfully', 'event' => $event]);
+    }
+
+    public function destroy($id)
+    {
+        $event = Event::find($id);
+        if (!$event) {
+            return response()->json(['message' => 'Event not found'], 404);
+        }
+
+        $event->delete();
+        return response()->json(['message' => 'Event deleted successfully']);
+    }
+}
