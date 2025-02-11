@@ -1,8 +1,10 @@
+import { useColorMode } from "@vueuse/core";
+
 export const useTheme = () => {
   const colorMode = useColorMode();
 
   const toggleTheme = () => {
-    colorMode.preference = colorMode.value === "light" ? "dark" : "light";
+    colorMode.value = colorMode.value === "light" ? "dark" : "light";
   };
 
   return {
