@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\EventController;
-use App\Http\Controllers\TournamentController;
+use App\Http\Controllers\api\TournamentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
