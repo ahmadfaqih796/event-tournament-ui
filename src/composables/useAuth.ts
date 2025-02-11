@@ -9,8 +9,10 @@ export const useAuth = () => {
 
   const token = useLocalStorage("auth_token", null);
   const error = ref("");
+  const loading = ref(false);
 
   const login = async (username: string, password: string) => {
+    loading.value = true;
     try {
       const response = await $axios.post("/api/login", { username, password });
 
@@ -19,6 +21,8 @@ export const useAuth = () => {
     } catch (err) {
       error.value = "Login gagal!";
       return false;
+    } finally {
+      loading.value = false;
     }
   };
 
@@ -36,5 +40,5 @@ export const useAuth = () => {
 
   const isAuthenticated = computed(() => !!token.value);
 
-  return { login, logout, isAuthenticated, token, error };
+  return { login, logout, isAuthenticated, token, error, loading };
 };

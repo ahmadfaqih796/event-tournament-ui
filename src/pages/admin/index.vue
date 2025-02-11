@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Admin Dashboard</h1>
+    <h1>Admin Dashboard</h1> {{ $route.fullPath }}
     <p>Selamat datang di panel admin!</p>
   </div>
 </template>

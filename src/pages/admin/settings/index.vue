@@ -1,6 +1,7 @@
 <template>
    <div>
       <h1>Admin Settings</h1>
+      {{ $route.fullPath }}
       <p>Selamat datang di panel admin!</p>
    </div>
 </template>
