@@ -1,14 +1,18 @@
 import { useLocalStorage } from "@vueuse/core";
+import type { AxiosInstance } from "axios";
+import { useNuxtApp } from "nuxt/app";
+import { computed, ref } from "vue";
 
 export const useAuth = () => {
-  const { $axios } = useNuxtApp();
+  const nuxtApp = useNuxtApp();
+  const $axios = nuxtApp.$axios as AxiosInstance;
+
   const token = useLocalStorage("auth_token", null);
   const error = ref("");
 
-  const login = async (email: string, password: string) => {
+  const login = async (username: string, password: string) => {
     try {
-      // const response = await $axios.post("/auth/login", { email, password });
-      const response = await $axios.post("/api/login", { email, password });
+      const response = await $axios.post("/api/login", { username, password });
 
       token.value = response.data.token;
       return true;

@@ -9,14 +9,14 @@
   <UIcon name="i-heroicons-sun" v-else />
 </UButton>
 <UForm @submit.prevent="onLogin">
-  <UFormGroup label="Email" name="email">
-    <UInput v-model="email" type="text" placeholder="Username" required />
+  <UFormGroup label="username" name="username">
+    <UInput v-model="username" type="text" placeholder="Username" required />
   </UFormGroup>
   <UFormGroup label="Password" name="password">
     <UInput v-model="password" type="password" defaultvalue="12345678" placeholder="Password" required />
   </UFormGroup>
 
-  <!-- <input v-model="email" type="text" placeholder="Username" required />
+  <!-- <input v-model="username" type="text" placeholder="Username" required />
   <input v-model="password" type="password" defaultvalue="12345678" placeholder="Password" required /> -->
   <!-- <Ubutton type="submit">Login</Ubutton> -->
   <UButton block type="submit">Button</UButton>
@@ -33,11 +33,11 @@ import { useRouter } from 'vue-router';
 const { login: doLogin, error } = useAuth();
 const { colorMode, toggleTheme } = useTheme();
 const router = useRouter();
-const email = ref('faqih@example.com');
+const username = ref('admin');
 const password = ref('12345678');
 
 const onLogin = async () => {
-  const success = await doLogin(email.value, password.value);
+  const success = await doLogin(username.value, password.value);
   if (success) {
     router.replace('/admin');
   }

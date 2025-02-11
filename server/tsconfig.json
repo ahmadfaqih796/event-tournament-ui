@@ -3,7 +3,9 @@
   "compilerOptions": {
     "types": ["@nuxt/types", "@nuxt/ui"],
     "paths": {
-      "#ui/*": ["./node_modules/@nuxt/ui/dist/*"]
+      "#ui/*": ["../node_modules/@nuxt/ui/dist/*"],
+      "@/*": ["../src/*"]
     }
-  }
+  },
+  "include": ["."]
 }

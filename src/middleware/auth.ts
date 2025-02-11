@@ -1,4 +1,5 @@
 import { useLocalStorage } from "@vueuse/core";
+import { defineNuxtRouteMiddleware, navigateTo } from "nuxt/app";
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const token = useLocalStorage("auth_token", null);
