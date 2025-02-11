@@ -25,6 +25,6 @@ class Event extends Model
 
     public function tournaments()
     {
-        return $this->hasMany(Tournament::class);
+        return $this->hasMany(Tournament::class)->select('event_id', 'name', 'game', 'status');
     }
 }

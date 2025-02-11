@@ -15,9 +15,21 @@ class EventController extends Controller
         $this->middleware('can:authorization')->except(['index', 'show']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with('createdBy')->get();
+        $keyword = $request->input('search');
+
+        $events = Event::with(['createdBy', 'tournaments'])
+            ->where('name', 'like', "%{$keyword}%")
+            ->orWhereHas('createdBy', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            })
+            ->orWhereHas('tournaments', function ($query) use ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('game', 'like', "%{$keyword}%");
+            })
+            ->get();
+
         return response()->json($events);
     }
 
