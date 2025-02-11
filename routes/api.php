@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\EventController;
+use App\Http\Controllers\TournamentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,16 @@ Route::controller(AuthController::class)->middleware(['auth:sanctum'])->group(fu
     Route::get('/me', 'me');
 });
 
+Route::get('/tournaments', [TournamentController::class, 'index']);
+Route::get('/tournaments/{id}', [TournamentController::class, 'show']);
+Route::controller(TournamentController::class)->middleware(['auth:sanctum'])->group(function () {
+    Route::post('/tournaments', 'store');
+    Route::put('/tournaments/{id}', 'update');
+    Route::delete('/tournaments/{id}', 'destroy');
+});
+
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{id}', [EventController::class, 'show']);
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/events', [EventController::class, 'store']);
     Route::put('/events/{id}', [EventController::class, 'update']);
