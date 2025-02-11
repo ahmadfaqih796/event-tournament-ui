@@ -4,9 +4,10 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "#components": ["./.nuxt/components.d.ts"]
     },
-    "types": ["@nuxt/schema"]
+    "types": ["@nuxt/schema", "@nuxt/types", "@nuxt/ui"],
     
   },
   "include": ["src", "nuxt.config.ts"]

@@ -1,24 +1,33 @@
 <template>
-  <div class="admin-layout">
-    <aside>
-      <nav>
-        <NuxtLink to="/admin">Dashboard</NuxtLink>
-        <NuxtLink to="/admin/settings">Settings</NuxtLink>
-        <button @click="handleLogout">Logout</button>
-      </nav>
-    </aside>
-    <main>
+  <UContainer class="admin-layout">
+
+    <UCard class="sidebar">
+      <UVerticalNavigation :links="navLinks" />
+
+      <UButton block color="red" variant="solid" @click="handleLogout">
+        Logout
+      </UButton>
+    </UCard>
+
+    <UCard class="content">
       <NuxtPage />
-    </main>
-  </div>
+    </UCard>
+
+  </UContainer>
 </template>
 
 <script setup>
 import { useAuth } from '@/composables/useAuth';
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const { logout } = useAuth();
 const router = useRouter();
+
+const navLinks = ref([
+  { label: 'Dashboard', to: '/admin', icon: 'i-heroicons-chart-bar' },
+  { label: 'Settings', to: '/admin/settings', icon: 'i-heroicons-cog' }
+]);
 
 const handleLogout = async () => {
   await logout();
@@ -30,16 +39,21 @@ const handleLogout = async () => {
 <style scoped>
 .admin-layout {
   display: flex;
+  gap: 16px;
+  height: 100vh;
 }
 
-aside {
-  width: 200px;
-  background-color: #f5f5f5;
-  padding: 20px;
+.sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-main {
+.content {
   flex: 1;
   padding: 20px;
+  overflow-y: auto;
 }
 </style>
