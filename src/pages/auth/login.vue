@@ -4,10 +4,10 @@
     <template #header>
       <h2 class="text-2xl font-bold text-center">Login Admin</h2>
     </template>
-<!-- <UButton @click="toggleTheme">
+<UButton @click="toggleTheme">
   <UIcon name="i-heroicons-moon" v-if="colorMode.value === 'light'" />
   <UIcon name="i-heroicons-sun" v-else />
-</UButton> -->
+</UButton>
 <UForm @submit.prevent="onLogin">
   <p v-if="error" class="error-message">{{ error }}</p>
   <UFormGroup label="username" name="username" class="mb-4">
