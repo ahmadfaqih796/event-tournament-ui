@@ -2,10 +2,13 @@
   <div class="admin-layout">
     <UCard>
       <div class="navbar">
-        <h1 class="text-2xl font-bold text-center">SMART FLOW</h1>
-        <UDropdown :items="menuItems">
-          <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar" class="cursor-pointer" />
-        </UDropdown>
+        <h1 class="text-2xl font-bold text-center">Esports</h1>
+        <div>
+          <h2>Add</h2>
+          <UDropdown :items="menuItems">
+            <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar" class="cursor-pointer" />
+          </UDropdown>
+        </div>
       </div>
     </UCard>
 
@@ -46,11 +49,12 @@
 import { useAuth } from '@/composables/useAuth';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import { useLocalStorage } from '@vueuse/core';
 
 const { logout } = useAuth();
 const router = useRouter();
-
-
+const session = useLocalStorage('auth_session', null);
+console.log("user", session)
 
 const navLinks = ref([
   { label: 'Dashboard', to: '/admin', icon: 'i-heroicons-chart-bar' },
