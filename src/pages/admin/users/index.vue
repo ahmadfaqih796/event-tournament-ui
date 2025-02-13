@@ -1,7 +1,7 @@
 <template>
    <div>
       <div class="flex justify-between items-center mb-3">
-         <h3 class="text-lg font-semibold">Events</h3>
+         <h3 class="text-lg font-semibold">Users</h3>
          <UButton @click="openModal('add')">Add</UButton>
       </div>
       <div class="border-2 border-gray-200 dark:border-gray-700">
@@ -69,14 +69,12 @@
 import { useNuxtApp } from 'nuxt/app';
 const { $axios } = useNuxtApp();
 
-const { data, pending, refresh } = useAsyncData('events', async () => {
+const { data, pending, refresh } = useAsyncData('users', async () => {
    try {
-      const response = await $axios.get('/events');
+      const response = await $axios.get('/users');
       console.log("kkkkk", response.data)
-      return response.data.map(event => ({
-         ...event,
-         disabledExpand: event.tournaments.length ? false : true,
-         created_by: event.created_by || { id: null, name: 'Unknown' }
+      return response.data.map(field => ({
+         ...field,
       }));
    } catch (error) {
       console.error('Error fetching events:', error);
@@ -88,7 +86,7 @@ const page = ref(1);
 const pageCount = 5;
 const modalOpen = ref(false);
 const modalType = ref('add');
-const form = ref({ name: '', location: '', description: '' });
+const form = ref({ name: '', username: '', role: '' });
 const selectedEvent = ref(null);
 
 const rows = computed(() => {
@@ -105,10 +103,9 @@ const expand = ref({
    row: {}
 })
 const columns = ref([
-   { key: 'name', label: 'Event Name' },
-   { key: 'tournaments', label: 'Tournaments' },
-   { key: 'approved', label: 'Approved' },
-   { key: 'created_by.name', label: 'Created By' },
+   { key: 'name', label: 'Name' },
+   { key: 'username', label: 'Username' },
+   { key: 'role', label: 'Role' },
    { key: 'created_at', label: 'Created At' },
    { key: 'actions', label: 'Actions' }
 ]);
