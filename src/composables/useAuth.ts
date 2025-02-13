@@ -14,7 +14,7 @@ export const useAuth = () => {
   const login = async (username: string, password: string) => {
     loading.value = true;
     try {
-      const response = await $axios.post("/api/login", { username, password });
+      const response = await $axios.post("/login", { username, password });
 
       token.value = response.data.token;
       return true;
@@ -28,7 +28,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     try {
-      const response = await $axios.post("/api/logout", {});
+      const response = await $axios.post("/logout", {});
       if (response.status == 200) {
         token.value = null;
       }

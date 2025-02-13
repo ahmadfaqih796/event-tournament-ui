@@ -1,5 +1,9 @@
 <template>
    <div>
+      <div class="flex justify-between items-center mb-3">
+         <h3 class="text-lg font-semibold">Events</h3>
+         <UButton @click="openModal('add')">Add</UButton>
+      </div>
       <div class="border-2 border-gray-200 dark:border-gray-700">
          <UTable :loading="pending" :rows="rows" :columns="columns" v-model:expand="expand"
             :ui="{ td: { base: 'max-w-[0] truncate' }, default: { checkbox: { color: 'gray' } } }">
@@ -8,13 +12,18 @@
                   :color="row.approved ? 'emerald' : 'red'" variant="subtle" />
             </template>
             <template #expand="{ row }">
-               <!-- Your custom expand action content -->
                <div class="p-4">
-                  <pre>{{ row }}</pre>
+                  <ul class="list-disc pl-5">
+                     <li v-for="tournament in row.tournaments" :key="tournament.id">
+                        {{ tournament.name }} - {{ tournament.game }} ({{ tournament.status }})
+                     </li>
+                  </ul>
+                  <!-- <pre>{{ row }}</pre> -->
                </div>
             </template>
             <template #tournaments-data="{ row }">
-               <div v-if="row.tournaments.length" class="p-4 border-t">
+               <div>
+                  {{ row.tournaments.length ? row.tournaments.length : 'No Tournaments' }}
                   <!-- <h3 class="font-semibold">Tournaments:</h3>
                   <ul class="list-disc pl-5">
                      <li v-for="tournament in row.tournaments" :key="tournament.event_id">
@@ -38,9 +47,15 @@
       <UModal v-model="modalOpen">
          <div class="p-6">
             <h3 class="text-lg font-semibold">{{ modalType === 'edit' ? 'Edit Event' : 'Add Event' }}</h3>
-            <UInput v-model="form.name" label="Event Name" class="mt-3" />
-            <UInput v-model="form.location" label="Location" class="mt-3" />
-            <UTextarea v-model="form.description" label="Description" class="mt-3" />
+            <UFormGroup label="Event Name" name="name" class="my-3">
+               <UInput v-model="form.name" label="Event Name" />
+            </UFormGroup>
+            <UFormGroup label="Location" name="location" class="my-3">
+               <UInput v-model="form.location" label="Location" />
+            </UFormGroup>
+            <UFormGroup label="Description" name="description" class="my-3">
+               <UTextarea v-model="form.description" label="Description" />
+            </UFormGroup>
             <div class="flex justify-end space-x-2 mt-4">
                <UButton @click="saveEvent" color="blue">Save</UButton>
                <UButton @click="modalOpen = false" color="gray">Cancel</UButton>
@@ -54,7 +69,7 @@
 import { useNuxtApp } from 'nuxt/app';
 const { $axios } = useNuxtApp();
 
-const { data, pending } = useAsyncData('events', async () => {
+const { data, pending, refresh } = useAsyncData('events', async () => {
    try {
       const response = await $axios.get('/events');
       console.log("kkkkk", response.data)
@@ -114,9 +129,15 @@ const saveEvent = async () => {
       if (modalType.value === 'edit' && selectedEvent.value) {
          await $axios.put(`/events/${selectedEvent.value.id}`, form.value);
       } else {
-         await $axios.post('/events', form.value);
+         await $axios.post('/events', {
+            ...form.value,
+            "start_date": "2025-05-01 10:00:00",
+            "end_date": "2025-05-05 18:00:00",
+         });
       }
       modalOpen.value = false;
+      alert('Event saved successfully!');
+      refresh();
    } catch (error) {
       console.error('Error saving event:', error);
    }
@@ -125,6 +146,8 @@ const saveEvent = async () => {
 const deleteEvent = async (id) => {
    try {
       await $axios.delete(`/events/${id}`);
+      alert('Event deleted successfully!');
+      refresh();
    } catch (error) {
       console.error('Error deleting event:', error);
    }

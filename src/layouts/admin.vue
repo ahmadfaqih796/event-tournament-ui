@@ -4,7 +4,7 @@
       <div class="navbar">
         <h1 class="text-2xl font-bold text-center">Esports</h1>
         <div>
-          <h2>Add</h2>
+          <!-- <h2>Add</h2> -->
           <UDropdown :items="menuItems">
             <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar" class="cursor-pointer" />
           </UDropdown>
