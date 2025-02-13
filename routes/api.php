@@ -3,6 +3,7 @@
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\EventController;
 use App\Http\Controllers\api\TournamentController;
+use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,14 @@ Route::controller(AuthController::class)->group(function () {
 Route::controller(AuthController::class)->middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', 'logout');
     Route::get('/me', 'me');
+});
+
+Route::get('/users', [UserController::class, 'index']);
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::controller(UserController::class)->middleware(['auth:sanctum'])->group(function () {
+    Route::post('/users', 'store');
+    Route::put('/users/{id}', 'update');
+    Route::delete('/users/{id}', 'destroy');
 });
 
 Route::get('/tournaments', [TournamentController::class, 'index']);
