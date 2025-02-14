@@ -48,19 +48,12 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'location' => 'required|string|max:255'
+            'role' => 'nullable|string',
         ]);
 
         $event = User::create([
             'name' => $request->name,
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'location' => $request->location,
-            'created_by' => Auth::id(),
+            'role' => $request->role,
         ]);
 
         return response()->json(['message' => 'User created successfully', 'event' => $event], 201);
@@ -75,18 +68,12 @@ class UserController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'location' => 'required|string|max:255'
+            'role' => 'nullable|string',
         ]);
 
         $event->update([
             'name' => $request->name,
-            'description' => $request->description,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'location' => $request->location,
+            'role' => $request->role,
         ]);
 
         return response()->json(['message' => 'User updated successfully', 'event' => $event]);
