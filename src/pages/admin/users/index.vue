@@ -5,33 +5,8 @@
          <UButton @click="openModal('add')">Add</UButton>
       </div>
       <div class="border-2 border-gray-200 dark:border-gray-700">
-         <UTable :loading="pending" :rows="rows" :columns="columns" v-model:expand="expand"
+         <UTable :loading="pending" :rows="rows" :columns="columns"
             :ui="{ td: { base: 'max-w-[0] truncate' }, default: { checkbox: { color: 'gray' } } }">
-            <template #approved-data="{ row }">
-               <UBadge size="xs" :label="row.approved ? 'Approved' : 'Rejected'"
-                  :color="row.approved ? 'emerald' : 'red'" variant="subtle" />
-            </template>
-            <template #expand="{ row }">
-               <div class="p-4">
-                  <ul class="list-disc pl-5">
-                     <li v-for="tournament in row.tournaments" :key="tournament.id">
-                        {{ tournament.name }} - {{ tournament.game }} ({{ tournament.status }})
-                     </li>
-                  </ul>
-                  <!-- <pre>{{ row }}</pre> -->
-               </div>
-            </template>
-            <template #tournaments-data="{ row }">
-               <div>
-                  {{ row.tournaments.length ? row.tournaments.length : 'No Tournaments' }}
-                  <!-- <h3 class="font-semibold">Tournaments:</h3>
-                  <ul class="list-disc pl-5">
-                     <li v-for="tournament in row.tournaments" :key="tournament.event_id">
-                        {{ tournament.name }} - {{ tournament.game }} ({{ tournament.status }})
-                     </li>
-                  </ul> -->
-               </div>
-            </template>
             <template #actions-data="{ row }">
                <UButton @click="openModal('edit', row)" size="sm">Edit</UButton>
                <UButton @click="deleteEvent(row.id)" color="red" size="sm">Delete</UButton>
@@ -66,6 +41,7 @@
 </template>
 
 <script setup>
+import moment from 'moment';
 import { useNuxtApp } from 'nuxt/app';
 const { $axios } = useNuxtApp();
 
@@ -90,11 +66,9 @@ const form = ref({ name: '', username: '', role: '' });
 const selectedEvent = ref(null);
 
 const rows = computed(() => {
-   return data.value ? data.value.map(event => ({
-      ...event,
-      tournaments: Array.isArray(event.tournaments) ? event.tournaments : [],
-      created_by: event.created_by || { id: null, name: 'Unknown' },
-      approved: event.approved || false
+   return data.value ? data.value.map(field => ({
+      ...field,
+      created_at: moment(field.created_at).format('YYYY-MM-DD HH:mm:ss'),
    })).slice((page.value - 1) * pageCount, (page.value) * pageCount) : [];
 });
 

@@ -66,6 +66,7 @@
 </template>
 
 <script setup>
+import moment from 'moment';
 import { useNuxtApp } from 'nuxt/app';
 const { $axios } = useNuxtApp();
 
@@ -92,11 +93,12 @@ const form = ref({ name: '', location: '', description: '' });
 const selectedEvent = ref(null);
 
 const rows = computed(() => {
-   return data.value ? data.value.map(event => ({
-      ...event,
-      tournaments: Array.isArray(event.tournaments) ? event.tournaments : [],
-      created_by: event.created_by || { id: null, name: 'Unknown' },
-      approved: event.approved || false
+   return data.value ? data.value.map(field => ({
+      ...field,
+      created_at: moment(field.created_at).format('YYYY-MM-DD HH:mm:ss'),
+      tournaments: Array.isArray(field.tournaments) ? field.tournaments : [],
+      created_by: field.created_by || { id: null, name: 'Unknown' },
+      approved: field.approved || false
    })).slice((page.value - 1) * pageCount, (page.value) * pageCount) : [];
 });
 

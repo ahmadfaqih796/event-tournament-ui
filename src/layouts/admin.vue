@@ -63,7 +63,8 @@ const navLinks = ref([
     icon: 'i-heroicons-folder',
     children: [
       { label: 'Users', to: '/admin/users', icon: 'i-heroicons-user-group' },
-      { label: 'Event', to: '/admin/events', icon: 'i-heroicons-calendar' }
+      { label: 'Event', to: '/admin/events', icon: 'i-heroicons-calendar' },
+      { label: 'Game', to: '/admin/games', icon: 'i-heroicons-play' }
     ]
   },
   { label: 'Settings', to: '/admin/settings', icon: 'i-heroicons-cog' }
