@@ -8,6 +8,7 @@ export const useAuth = () => {
   const $axios = nuxtApp.$axios as AxiosInstance;
 
   const token = useLocalStorage("auth_token", null);
+  const user = useLocalStorage("auth_user", null);
   const error = ref("");
   const loading = ref(false);
 
@@ -15,8 +16,8 @@ export const useAuth = () => {
     loading.value = true;
     try {
       const response = await $axios.post("/login", { username, password });
-
       token.value = response.data.token;
+      await getSession();
       return true;
     } catch (err) {
       error.value = "Login gagal!";
@@ -38,7 +39,29 @@ export const useAuth = () => {
     }
   };
 
+  const getSession = async () => {
+    try {
+      const response = await $axios.get("/me");
+      if (response.status === 200) {
+        user.value = response.data;
+      }
+      return response.data;
+    } catch (error) {
+      console.error("Gagal mendapatkan session:", error);
+      return false;
+    }
+  };
+
   const isAuthenticated = computed(() => !!token.value);
 
-  return { login, logout, isAuthenticated, token, error, loading };
+  return {
+    login,
+    logout,
+    getSession,
+    user,
+    isAuthenticated,
+    token,
+    error,
+    loading,
+  };
 };

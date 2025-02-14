@@ -3,8 +3,8 @@
     <UCard>
       <div class="navbar">
         <h1 class="text-2xl font-bold text-center">Esports</h1>
-        <div>
-          <!-- <h2>Add</h2> -->
+        <div class="flex items-center gap-4">
+          <h2>{{ user?.name || '' }}</h2>
           <UDropdown :items="menuItems">
             <UAvatar src="https://avatars.githubusercontent.com/u/739984?v=4" alt="Avatar" class="cursor-pointer" />
           </UDropdown>
@@ -24,7 +24,7 @@
               <UIcon v-if="item.children"
                 :name="isOpen[index] ? 'i-heroicons-chevron-down' : 'i-heroicons-chevron-right'" />
             </div>
-            <ul v-if="item.children && isOpen[index]" class="submenu">
+            <ul v-if="item.children && isOpen[index]" class="submenu cursor-pointer">
               <li v-for="(child, cIndex) in item.children" :key="cIndex" @click="navigateTo(child.to)"
                 class="flex items-center gap-4 pl-4 my-2">
                 <UIcon :name="child.icon" class="nav-icon" />
@@ -48,13 +48,16 @@
 <script setup>
 import { useAuth } from '@/composables/useAuth';
 import { useRouter } from 'vue-router';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 
-const { logout } = useAuth();
+const { logout, getSession, user } = useAuth();
 const router = useRouter();
 const session = useLocalStorage('auth_session', null);
-console.log("user", session)
+
+onMounted(async () => {
+  await getSession();
+});
 
 const navLinks = ref([
   { label: 'Dashboard', to: '/admin', icon: 'i-heroicons-chart-bar' },
