@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\EventController;
 use App\Http\Controllers\api\GameController;
 use App\Http\Controllers\api\NewsController;
+use App\Http\Controllers\api\TeamController;
 use App\Http\Controllers\api\TournamentController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
@@ -60,6 +61,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/games', [GameController::class, 'store']);
     Route::put('/games/{id}', [GameController::class, 'update']);
     Route::delete('/games/{id}', [GameController::class, 'destroy']);
+});
+
+Route::get('/teams', [TeamController::class, 'index']);
+Route::get('/teams/{id}', [TeamController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/teams', [TeamController::class, 'store']);
+    Route::put('/teams/{id}', [TeamController::class, 'update']);
+    Route::delete('/teams/{id}', [TeamController::class, 'destroy']);
 });
 
 Route::get('/news', [NewsController::class, 'index']);

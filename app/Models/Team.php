@@ -16,11 +16,11 @@ class Team extends Model
 
     public function leader()
     {
-        return $this->belongsTo(User::class, 'leader_id');
+        return $this->belongsTo(User::class, 'leader_id')->select('id', 'name');
     }
 
-    // public function members()
-    // {
-    //     return $this->hasMany(TeamMember::class);
-    // }
+    public function members()
+    {
+        return $this->hasMany(TeamMember::class);
+    }
 }
