@@ -17,8 +17,8 @@ class News extends Model
         'created_by'
     ];
 
-    public function user()
+    public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->select('id', 'name');
     }
 }
