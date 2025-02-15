@@ -45,7 +45,7 @@ class TeamController extends Controller
             'leader_id' => Auth::id(),
         ]);
 
-        return response()->json(['message' => 'Team created successfully', 'game' => $data], 201);
+        return response()->json(['message' => 'Team created successfully', 'data' => $data], 201);
     }
 
     public function update(Request $request, $id)
@@ -57,13 +57,15 @@ class TeamController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'leader_id' => 'required|integer',
         ]);
 
         $data->update([
             'name' => $request->name,
+            'leader_id' => $request->leader_id,
         ]);
 
-        return response()->json(['message' => 'Team updated successfully', 'game' => $data]);
+        return response()->json(['message' => 'Team updated successfully', 'data' => $data]);
     }
 
     public function destroy($id)
