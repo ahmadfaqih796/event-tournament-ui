@@ -18,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         'App\Models\Model\Event' => 'App\Policies\EventPolicy',
         'App\Models\Model\News' => 'App\Policies\NewsPolicy',
+        'App\Models\Model\TournamentRegistration' => 'App\Policies\TournamentRegistrationPolicy',
         // Event::class => EventPolicy::class,
 
     ];

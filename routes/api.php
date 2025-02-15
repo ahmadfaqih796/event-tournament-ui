@@ -7,6 +7,7 @@ use App\Http\Controllers\api\NewsController;
 use App\Http\Controllers\api\TeamController;
 use App\Http\Controllers\api\TeamMemberController;
 use App\Http\Controllers\api\TournamentController;
+use App\Http\Controllers\api\TournamentRegistrationController;
 use App\Http\Controllers\api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,14 @@ Route::controller(TournamentController::class)->middleware(['auth:sanctum'])->gr
     Route::post('/tournaments', 'store');
     Route::put('/tournaments/{id}', 'update');
     Route::delete('/tournaments/{id}', 'destroy');
+});
+
+Route::get('/tournament-registration', [TournamentRegistrationController::class, 'index']);
+Route::get('/tournament-registration/{id}', [TournamentRegistrationController::class, 'show']);
+Route::controller(TournamentRegistrationController::class)->middleware(['auth:sanctum'])->group(function () {
+    Route::post('/tournament-registration', 'store');
+    Route::put('/tournament-registration/{id}', 'update');
+    Route::delete('/tournament-registration/{id}', 'destroy');
 });
 
 Route::get('/events', [EventController::class, 'index']);
