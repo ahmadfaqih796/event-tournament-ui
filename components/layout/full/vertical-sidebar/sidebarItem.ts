@@ -58,7 +58,7 @@ const sidebarItem: menu[] = [
     access: ["admin", "komunitas"],
   },
   {
-    title: "Tournaments",
+    title: "Tournament",
     icon: UserPlusIcon,
     to: "/admin/data/tournaments",
     access: ["admin", "komunitas"],
