@@ -37,6 +37,10 @@ class TournamentController extends Controller
                 'name' => 'required|string|max:255',
                 'event_id' => 'required|exists:events,id',
                 'game' => 'required|string|max:255',
+                'is_paid' => 'required|boolean',
+                "price" => 'required|string|max:255',
+                'open_date'  => 'required|date',
+                'close_date' => 'required|date|after_or_equal:open_date',
                 'status' => 'required|in:pending,ongoing,completed'
             ]
         );
@@ -45,6 +49,10 @@ class TournamentController extends Controller
             'name' => $request->name,
             'event_id' => $request->event_id,
             'game' => $request->game,
+            'is_paid' => $request->is_paid,
+            'price' => $request->price,
+            'open_date' => $request->open_date,
+            'close_date' => $request->close_date,
             'status' => $request->status,
         ]);
 
