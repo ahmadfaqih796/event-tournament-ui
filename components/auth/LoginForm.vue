@@ -1,0 +1,49 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+const checkbox = ref(true);
+const formState = reactive({
+    username: 'admin',
+    password: '12345678'
+});
+const config = useRuntimeConfig();
+
+const onSubmit = () => {
+
+    console.log(formState, config.public.apiBase);
+};
+
+</script>
+
+<template>
+    <v-form @submit.prevent="onSubmit">
+
+        <v-row class="d-flex mb-3">
+            <v-col cols="12">
+                <v-label class="font-weight-bold mb-1">Username</v-label>
+                <v-text-field v-model="formState.username" variant="outlined" hide-details
+                    color="primary"></v-text-field>
+            </v-col>
+            <v-col cols="12">
+                <v-label class="font-weight-bold mb-1">Password</v-label>
+                <v-text-field v-model="formState.password" variant="outlined" type="password" hide-details
+                    color="primary"></v-text-field>
+            </v-col>
+            <v-col cols="12" class="pt-0">
+                <div class="d-flex flex-wrap align-center ml-n2">
+                    <v-checkbox v-model="checkbox" color="primary" hide-details>
+                        <template v-slot:label class="text-body-1">Remeber this Device</template>
+                    </v-checkbox>
+                    <div class="ml-sm-auto">
+                        <NuxtLink to="/"
+                            class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium">
+                            Forgot
+                            Password ?</NuxtLink>
+                    </div>
+                </div>
+            </v-col>
+            <v-col cols="12" class="pt-0">
+                <v-btn type="submit" color="primary" size="large" block flat>Sign in</v-btn>
+            </v-col>
+        </v-row>
+    </v-form>
+</template>
