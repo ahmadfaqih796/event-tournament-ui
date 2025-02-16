@@ -24,7 +24,7 @@ class TournamentRegistration extends Model
 
     public function tournament()
     {
-        return $this->belongsTo(Tournament::class)->select('id', 'name', 'game', 'event_id');
+        return $this->belongsTo(Tournament::class)->select('id', 'name', 'game', 'price', 'event_id');
     }
 
     public function team()

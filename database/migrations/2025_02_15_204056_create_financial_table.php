@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('financial', function (Blueprint $table) {
+        Schema::create('financials', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tr_id')->constrained('tournament_registrations')->onDelete('cascade');
             $table->string('event_name');
             $table->string('tournament_name');
             $table->string('game_name');
+            $table->string('team_name');
             $table->string('price');
             $table->string('pay');
             $table->string('paid_by');

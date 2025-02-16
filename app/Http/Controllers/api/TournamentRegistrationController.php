@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Financial;
 use App\Models\TournamentRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,7 +60,7 @@ class TournamentRegistrationController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = TournamentRegistration::find($id);
+        $data = TournamentRegistration::with(['team', 'tournament', 'tournament.event', 'payBy'])->find($id);
         if (!$data) {
             return response()->json(['message' => 'Tournament Registration not found'], 404);
         }
@@ -73,6 +74,24 @@ class TournamentRegistrationController extends Controller
         $data->update([
             'payment_status' => $request->payment_status,
         ]);
+
+        if ($request->payment_status == 'paid') {
+            $financial = Financial::where('tr_id', $data->id)->first();
+            if ($financial) {
+                throw new \Exception('Status already paid');
+            }
+            Financial::create([
+                'tr_id' => $data->id,
+                'paid_by' => $data->payBy->name,
+                'struk' => 'TR' . date('ymdHis') . $data->id,
+                'event_name' => $data->tournament->event->name,
+                'tournament_name' => $data->tournament->name,
+                'game_name' => $data->tournament->game,
+                'team_name' => $data->team->name,
+                'price' => $data->tournament->price,
+                'pay' => $data->tournament->price,
+            ]);
+        }
 
         return response()->json($data);
     }

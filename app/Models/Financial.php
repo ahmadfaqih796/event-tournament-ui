@@ -11,9 +11,11 @@ class Financial extends Model
 
     protected $fillable = [
         'tr_id',
+        'struk',
         'event_name',
         'tournament_name',
         'game_name',
+        'team_name',
         'price',
         'pay',
         'paid_by'
