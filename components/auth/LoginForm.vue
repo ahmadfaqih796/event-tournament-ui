@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 const checkbox = ref(true);
+const { login: doLogin, error, loading } = useAuth();
 const formState = reactive({
     username: 'admin',
     password: '12345678'
 });
-const config = useRuntimeConfig();
-
-const onSubmit = () => {
-
-    console.log(formState, config.public.apiBase);
+const router = useRouter();
+const onSubmit = async () => {
+    const success = await doLogin(formState.username, formState.password);
+    if (success) {
+        navigateTo('/admin');
+    }
 };
-
 </script>
 
 <template>
