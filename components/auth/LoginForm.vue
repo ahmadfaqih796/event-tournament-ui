@@ -10,7 +10,7 @@ const router = useRouter();
 const onSubmit = async () => {
     const success = await doLogin(formState.username, formState.password);
     if (success) {
-        navigateTo('/admin');
+        navigateTo('/admin/dashboard');
     }
 };
 </script>

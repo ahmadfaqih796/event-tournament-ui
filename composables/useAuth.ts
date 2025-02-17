@@ -8,7 +8,7 @@ export const useAuth = () => {
   const $axios = nuxtApp.$axios as AxiosInstance;
 
   const token = useLocalStorage("auth_token", null);
-  const user = useLocalStorage("auth_user", null);
+  const user = useLocalStorage("auth_user", null as any);
   const error = ref("");
   const loading = ref(false);
 
@@ -17,7 +17,7 @@ export const useAuth = () => {
     try {
       const response = await $axios.post("/login", { username, password });
       token.value = response.data.token;
-      await getSession();
+      await getSession(response.data.token);
       return true;
     } catch (err) {
       error.value = "Login gagal!";
@@ -39,11 +39,17 @@ export const useAuth = () => {
     }
   };
 
-  const getSession = async () => {
+  const getSession = async (token: string) => {
+    console.log("toeken", token);
     try {
-      const response = await $axios.get("/me");
+      const response = await $axios.get("/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("response data", response.data);
       if (response.status === 200) {
-        user.value = response.data;
+        user.value = JSON.stringify(response.data) as string;
       }
       return response.data;
     } catch (error) {
