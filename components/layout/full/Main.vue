@@ -6,8 +6,7 @@ import { Menu2Icon } from 'vue-tabler-icons';
 const sidebarMenu = shallowRef(sidebarItems);
 const sDrawer = ref(true);
 const { user } = useAuth();
-const router = useRouter();
-console.log("rooter", router.currentRoute.value);
+const router = useRouter() as any;
 </script>
 
 <template>
@@ -48,8 +47,10 @@ console.log("rooter", router.currentRoute.value);
                     variant="flat" size="small">
                     <Menu2Icon size="20" stroke-width="1.5" />
                 </v-btn>
-                <v-text class=" ms-md-3 ms-sm-5 ms-3 text-muted">{{ router.currentRoute.value.name
-                    }}</v-text>
+                <v-text class=" ms-md-3 ms-sm-5 ms-3 text-h5">{{
+                    (router.currentRoute.value.name.split('-')?.[2] ||
+                        router.currentRoute.value.name.split('-')?.[1]).replace(/([A-Z])/g, ' $1').trim() || 'data'
+                }}</v-text>
                 <!-- Notification -->
                 <!-- <LayoutFullVerticalHeaderNotificationDD /> -->
             </div>
