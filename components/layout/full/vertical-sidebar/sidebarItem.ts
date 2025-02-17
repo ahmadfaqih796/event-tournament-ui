@@ -28,6 +28,11 @@ const sidebarItem: menu[] = [
     icon: UserPlusIcon,
     to: "/admin/managements/users",
   },
+  {
+    title: "Games",
+    icon: UserPlusIcon,
+    to: "/admin/managements/games",
+  },
 ];
 
 export default sidebarItem;
