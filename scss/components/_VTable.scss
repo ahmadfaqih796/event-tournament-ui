@@ -7,30 +7,22 @@
       background-color: #f5f5f5;
    }
 
-   th,
-   td {
+   th {
       padding: 12px;
       text-align: left;
-      border-bottom: 1px solid #ddd;
+      font-weight: bold;
+      background-color: #f8f9fa;
+      border-bottom: 2px solid #ddd;
+      user-select: none;
    }
 
-   @media (min-width: 1024px) {
-      th:nth-child(1),
-      td:nth-child(1) {
-         width: 10%;
-      } // Kolom pertama
-      th:nth-child(2),
-      td:nth-child(2) {
-         width: 30%;
-      } // Kolom kedua
-      th:nth-child(3),
-      td:nth-child(3) {
-         width: 40%;
-      } // Kolom ketiga
-      th:nth-child(4),
-      td:nth-child(4) {
-         width: 20%;
-      } // Kolom keempat
+   th:hover {
+      background-color: #e9ecef;
+   }
+
+   td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
    }
 
    @media (max-width: 768px) {
@@ -46,10 +38,16 @@
          width: 100%;
       }
 
+      tr {
+         border: 1px solid #ddd;
+         margin-bottom: 10px;
+         background: #fff;
+      }
+
       td {
-         text-align: right;
+         text-align: center;
+         padding: 10px;
          position: relative;
-         padding-left: 50%;
       }
 
       td::before {

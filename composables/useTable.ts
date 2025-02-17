@@ -1,38 +1,64 @@
-// ~/composables/useTable.ts
-import { ref, computed } from "vue";
-
-export function useTable<T>(items: T[], defaultPageSize = 5) {
+export function useTable(items: any[]) {
+  const itemsRef = ref(items);
   const searchQuery = ref("");
   const currentPage = ref(1);
-  const pageSize = ref(defaultPageSize);
+  const pageSize = ref(5);
+  const sortField = ref<string | null>(null);
+  const sortOrder = ref<"asc" | "desc" | null>(null);
 
-  // Filter data berdasarkan pencarian
+  const setSort = (field: string) => {
+    if (sortField.value === field) {
+      sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+    } else {
+      sortField.value = field;
+      sortOrder.value = "asc";
+    }
+  };
+
   const filteredItems = computed(() => {
-    return items.filter((item) =>
-      Object.values(item as Object).some((val) =>
+    return itemsRef.value.filter((item) =>
+      Object.values(item).some((val) =>
         String(val).toLowerCase().includes(searchQuery.value.toLowerCase())
       )
     );
   });
 
-  // Hitung total halaman
+  const sortedItems = computed(() => {
+    if (!sortField.value) return filteredItems.value;
+    return [...filteredItems.value].sort((a, b) => {
+      const valA = a[sortField.value!];
+      const valB = b[sortField.value!];
+
+      if (valA < valB) return sortOrder.value === "asc" ? -1 : 1;
+      if (valA > valB) return sortOrder.value === "asc" ? 1 : -1;
+      return 0;
+    });
+  });
+
+  // 🔹 Paginasi
   const totalPages = computed(() =>
-    Math.ceil(filteredItems.value.length / pageSize.value)
+    Math.ceil(sortedItems.value.length / pageSize.value)
   );
 
-  // Data yang ditampilkan berdasarkan halaman
+  watchEffect(() => {
+    if (currentPage.value > totalPages.value) {
+      currentPage.value = totalPages.value || 1;
+    }
+  });
+
   const paginatedItems = computed(() => {
     const start = (currentPage.value - 1) * pageSize.value;
-    const end = start + pageSize.value;
-    return filteredItems.value.slice(start, end);
+    return sortedItems.value.slice(start, start + pageSize.value);
   });
 
   return {
     searchQuery,
     currentPage,
     pageSize,
-    filteredItems,
+    sortField,
+    sortOrder,
     paginatedItems,
     totalPages,
+    setSort,
   };
 }
