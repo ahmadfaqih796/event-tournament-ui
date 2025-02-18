@@ -15,7 +15,7 @@ const router = useRouter() as any;
         <!---Logo part -->
         <div class="pa-5">
             <!-- <LayoutFullLogo /> -->
-            <h3 class="text-h3 font-weight-bold text-center">Esport Padang</h3>
+            <h3 class="text-h3 font-weight-bold text-center">Esport</h3>
         </div>
         <!-- ---------------------------------------------- -->
         <!---Navigation -->
