@@ -14,7 +14,8 @@ const router = useRouter() as any;
     <v-navigation-drawer left elevation="0" app class="leftSidebar" v-model="sDrawer">
         <!---Logo part -->
         <div class="pa-5">
-            <LayoutFullLogo />
+            <!-- <LayoutFullLogo /> -->
+            <h3 class="text-h3 font-weight-bold text-center">Esport Padang</h3>
         </div>
         <!-- ---------------------------------------------- -->
         <!---Navigation -->

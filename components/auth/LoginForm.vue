@@ -29,7 +29,7 @@ const onSubmit = async () => {
                 <v-text-field v-model="formState.password" variant="outlined" type="password" hide-details
                     color="primary"></v-text-field>
             </v-col>
-            <v-col cols="12" class="pt-0">
+            <!-- <v-col cols="12" class="pt-0">
                 <div class="d-flex flex-wrap align-center ml-n2">
                     <v-checkbox v-model="checkbox" color="primary" hide-details>
                         <template v-slot:label class="text-body-1">Remeber this Device</template>
@@ -41,7 +41,7 @@ const onSubmit = async () => {
                             Password ?</NuxtLink>
                     </div>
                 </div>
-            </v-col>
+            </v-col> -->
             <v-col cols="12" class="pt-0">
                 <v-btn type="submit" color="primary" size="large" block flat>Sign in</v-btn>
             </v-col>

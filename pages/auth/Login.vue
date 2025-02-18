@@ -12,12 +12,12 @@ definePageMeta({
                     <v-card rounded="md" elevation="10" class="px-sm-1 px-0 withbg mx-auto" max-width="500">
                         <v-card-item class="pa-sm-8">
                             <div class="d-flex justify-center py-4">
-                                <LayoutFullLogo />
+                                <!-- <LayoutFullLogo /> -->
+                                 <h3 class="text-h3">Esport Padang</h3>
                             </div>
-                            <div class="text-body-1 text-muted text-center mb-3">Your Social Campaigns</div>
+                            <!-- <div class="text-body-1 text-muted text-center mb-3">Your Social Campaigns</div> -->
                             <AuthLoginForm />
                             <h6 class="text-h6 text-muted font-weight-medium d-flex justify-center align-center mt-3">
-                                New to Modernize?
                                 <NuxtLink to="/auth/register"
                                     class="text-primary text-decoration-none text-body-1 opacity-1 font-weight-medium pl-2">
                                     Create an account</NuxtLink>

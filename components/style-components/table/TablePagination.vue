@@ -31,7 +31,7 @@ const emit = defineEmits(['update:searchQuery', 'update:pageSize', 'update:curre
 
 <template>
   <div>
-    <!-- Search Input -->
+    
     <v-text-field 
       :model-value="searchQuery"
       @update:model-value="emit('update:searchQuery', $event)"
@@ -40,6 +40,7 @@ const emit = defineEmits(['update:searchQuery', 'update:pageSize', 'update:curre
       dense
       clearable
       class="mb-4"
+      append-inner-icon="mdi-magnify"
     ></v-text-field>
 
     <!-- Pagination Controls -->
