@@ -6,7 +6,13 @@ export const useGameService = () => {
   const fetchGames = async () => {
     try {
       const response = await $axios.get("/games");
-      return response.data;
+      const dataMap = response.data.map((item: any, index: number) => {
+        return {
+          ...item,
+          no: index + 1,
+        };
+      });
+      return dataMap;
     } catch (error) {
       console.error("Error fetching Games:", error);
       return [];

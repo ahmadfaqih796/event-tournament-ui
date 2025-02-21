@@ -5,6 +5,7 @@ const props = defineProps<{
    title: string;
    modelValue: boolean;
    width?: string;
+   loading?: boolean;
 }>();
 
 const emit = defineEmits(['update:modelValue', 'confirm']);
@@ -24,7 +25,9 @@ const closeModal = () => emit('update:modelValue', false);
          </v-card-text>
          <v-card-actions class="justify-end">
             <v-btn color="grey" @click="closeModal">Cancel</v-btn>
-            <v-btn color="primary" @click="emit('confirm')">Confirm</v-btn>
+            <v-btn color="primary" :loading="props.loading" @click="emit('confirm')">
+               {{ props.loading ? 'Please wait...' : 'Confirm' }}
+            </v-btn>
          </v-card-actions>
       </v-card>
    </v-dialog>

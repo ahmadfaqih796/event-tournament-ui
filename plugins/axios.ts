@@ -25,6 +25,10 @@ export default defineNuxtPlugin(() => {
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
+      if (error.response.data.message === "Unauthenticated.") {
+        token.value = null;
+        window.location.href = "/auth/login"; 
+      }
       return Promise.reject(error);
     }
   );

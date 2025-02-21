@@ -8,20 +8,24 @@ import { useGameService } from "@/services/gameService";
 const { fetchGames, addGame, updateGame, deleteGame } = useGameService();
 
 const isModalOpen = ref(false);
+const isLoading = ref(false);
 const form = ref({ id: null, name: "" });
 const items = ref([]);
 const modalType = ref<"add" | "edit" | "delete" | null>(null);
-
-// **Ensure reactivity**
 const reactiveItems = computed(() => items.value);
 
 const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
-  if (rowData) form.value = { ...rowData };
+  if (type === "add") {
+    form.value = { id: null, name: "" };
+  } else if (rowData) {
+    form.value = { ...rowData };
+  }
   isModalOpen.value = true;
 };
 
 const confirmAction = async () => {
+  isLoading.value = true;
   try {
     if (modalType.value === "add") {
       await addGame(form.value);
@@ -34,6 +38,8 @@ const confirmAction = async () => {
     items.value = await fetchGames();
   } catch (error) {
     console.error("Action failed:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -53,9 +59,9 @@ watch(items, (newItems) => {
       <UiParentCard title="Games">
         <TablePagination
           :columns="[
-            { title: 'ID', field: 'id', sortable: true },
+            { title: 'No', field: 'no', sortable: true, width: 80},
             { title: 'Name', field: 'name', sortable: true },
-            { title: 'Actions', field: 'actions', 
+            { title: 'Actions', field: 'actions', width: 150, 
               actions: (rowData: any) => [
                 { label: 'Edit', color: 'primary', icon: 'mdi-pencil', onClick: () => openModal('edit', rowData) },
                 { label: 'Delete', color: 'error', icon: 'mdi-delete', onClick: () => openModal('delete', rowData) }
@@ -69,7 +75,7 @@ watch(items, (newItems) => {
     </v-col>
   </v-row>
 
-  <BaseModal v-model="isModalOpen" :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'" @confirm="confirmAction">
+  <BaseModal v-model="isModalOpen" :loading="isLoading" :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'" @confirm="confirmAction">
     <template v-if="modalType !== 'delete'">
       <v-text-field v-model="form.name" label="Name"></v-text-field>
     </template>

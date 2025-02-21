@@ -15,6 +15,8 @@ const props = defineProps<{
   extraButtons?: { label: string; color: string; icon: string; onClick: () => void }[];
 }>();
 
+
+
 const reactiveItems = computed(() => props.items);
 
 const {
@@ -36,20 +38,20 @@ watch(paginatedItems, (newPaginatedItems) => {
 </script>
 
 <template>
-  <div>
-    <v-container fluid class="bg-surface-variant">
+  <div class="my-4 mx-4">
+    <v-container fluid class="pa-0">
       <v-row>
         <v-col cols="12" md="3">
           <v-sheet>
             <input type="text" v-model="searchQuery" @update:model-value="emit('update:searchQuery', $event)"
-              class="pa-2 w-100" placeholder="Search..." clearable append-inner-icon="mdi-magnify" />
+              class="pa-2 w-100 rounded border border-primary" placeholder="Search..." clearable
+              append-inner-icon="mdi-magnify" />
           </v-sheet>
         </v-col>
         <v-col>
           <v-sheet class="d-flex justify-end gap-3">
             <template v-if="extraButtons">
-              <v-btn v-for="button in extraButtons" :key="button.label" :color="button.color"
-                @click="button.onClick">
+              <v-btn v-for="button in extraButtons" :key="button.label" :color="button.color" @click="button.onClick">
                 <v-icon left>{{ button.icon }}</v-icon>
                 {{ button.label }}
               </v-btn>
@@ -92,10 +94,12 @@ watch(paginatedItems, (newPaginatedItems) => {
               <span v-html="col.formatter(item)"></span>
             </template>
             <template v-else-if="col.field === 'actions'">
-              <v-btn v-for="action in col.actions ? col.actions(item, index) : []" :key="action.label"
-                :color="action.color" :icon="action.icon" @click="action.onClick" class="mr-2">
-                <v-icon>{{ action.icon }}</v-icon>
-              </v-btn>
+              <div class="d-flex align-center justify-center">
+                <v-btn v-for="action in col.actions ? col.actions(item, index) : []" :key="action.label"
+                  :color="action.color" :icon="action.icon" @click="action.onClick" density="comfortable" class="mr-2">
+                  <v-icon>{{ action.icon }}</v-icon>
+                </v-btn>
+              </div>
             </template>
             <template v-else>
               {{ item[col.field] }}
