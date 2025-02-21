@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from "vue";
+import BaseModal from "@/components/common/BaseModal.vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
 import TablePagination from "@/components/style-components/table/TablePagination.vue";
-import BaseModal from "@/components/common/BaseModal.vue";
 import { useGameService } from "@/services/gameService";
+import { computed, onMounted, ref, watch } from "vue";
+import { useSnackbar } from "~/composables/useSnackbar";
 
 const { fetchGames, addGame, updateGame, deleteGame } = useGameService();
+const { showSnackbar } = useSnackbar();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
@@ -29,10 +31,13 @@ const confirmAction = async () => {
   try {
     if (modalType.value === "add") {
       await addGame(form.value);
+      showSnackbar({ message: "Game berhasil ditambahkan!", color: "success" } );
     } else if (modalType.value === "edit" && form.value.id !== null) {
       await updateGame(form.value.id, form.value);
+      showSnackbar({ message: "Game berhasil diubah!", color: "success" });
     } else if (modalType.value === "delete" && form.value.id !== null) {
       await deleteGame(form.value.id);
+      showSnackbar({ message: "Game berhasil dihapus!", color: "success" });
     }
     isModalOpen.value = false;
     items.value = await fetchGames();
@@ -57,25 +62,25 @@ watch(items, (newItems) => {
   <v-row>
     <v-col cols="12">
       <UiParentCard title="Games">
-        <TablePagination
-          :columns="[
-            { title: 'No', field: 'no', sortable: true, width: 80},
-            { title: 'Name', field: 'name', sortable: true },
-            { title: 'Actions', field: 'actions', width: 150, 
-              actions: (rowData: any) => [
-                { label: 'Edit', color: 'primary', icon: 'mdi-pencil', onClick: () => openModal('edit', rowData) },
-                { label: 'Delete', color: 'error', icon: 'mdi-delete', onClick: () => openModal('delete', rowData) }
-              ] 
-            }
-          ]"
-          :items="reactiveItems"
-          :extraButtons="[{ label: 'Add', color: 'primary', icon: 'mdi-plus', onClick: () => openModal('add') }]"
-        />
+        <TablePagination :columns="[
+          { title: 'No', field: 'no', sortable: true, width: 80 },
+          { title: 'Name', field: 'name', sortable: true },
+          {
+            title: 'Actions', field: 'actions', width: 150,
+            actions: (rowData: any) => [
+              { label: 'Edit', color: 'primary', icon: 'mdi-pencil', onClick: () => openModal('edit', rowData) },
+              { label: 'Delete', color: 'error', icon: 'mdi-delete', onClick: () => openModal('delete', rowData) }
+            ]
+          }
+        ]" :items="reactiveItems"
+          :extraButtons="[{ label: 'Add', color: 'primary', icon: 'mdi-plus', onClick: () => openModal('add') }]" />
       </UiParentCard>
     </v-col>
   </v-row>
 
-  <BaseModal v-model="isModalOpen" :loading="isLoading" :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'" @confirm="confirmAction">
+  <BaseModal v-model="isModalOpen" :loading="isLoading"
+    :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'"
+    @confirm="confirmAction">
     <template v-if="modalType !== 'delete'">
       <v-text-field v-model="form.name" label="Name"></v-text-field>
     </template>

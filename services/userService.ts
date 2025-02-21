@@ -1,11 +1,11 @@
 import { useNuxtApp } from "#app";
 
-export const useGameService = () => {
+export const useUserService = () => {
   const { $axios } = useNuxtApp();
 
-  const fetchGames = async () => {
+  const fetchUsers = async () => {
     try {
-      const response = await $axios.get("/games");
+      const response = await $axios.get("/users");
       const dataMap = response.data.map((item: any, index: number) => {
         return {
           ...item,
@@ -14,14 +14,14 @@ export const useGameService = () => {
       });
       return dataMap;
     } catch (error) {
-      console.error("Error fetching Games:", error);
+      console.error("Error fetching users:", error);
       return [];
     }
   };
 
-  const addGame = async (gameData: any) => {
+  const addUser = async (userData: any) => {
     try {
-      const response = await $axios.post("/games", gameData);
+      const response = await $axios.post("/users", userData);
       return response.data;
     } catch (error) {
       console.error("Error adding user:", error);
@@ -29,9 +29,9 @@ export const useGameService = () => {
     }
   };
 
-  const updateGame = async (id: number, gameData: any) => {
+  const updateUser = async (id: number, userData: any) => {
     try {
-      const response = await $axios.put(`/games/${id}`, gameData);
+      const response = await $axios.put(`/users/${id}`, userData);
       return response.data;
     } catch (error) {
       console.error("Error updating user:", error);
@@ -39,14 +39,14 @@ export const useGameService = () => {
     }
   };
 
-  const deleteGame = async (id: number) => {
+  const deleteUser = async (id: number) => {
     try {
-      await $axios.delete(`/games/${id}`);
+      await $axios.delete(`/users/${id}`);
     } catch (error) {
       console.error("Error deleting user:", error);
       throw error;
     }
   };
 
-  return { fetchGames, addGame, updateGame, deleteGame };
+  return { fetchUsers, addUser, updateUser, deleteUser };
 };
