@@ -1,79 +1,80 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import UiParentCard from '@/components/shared/UiParentCard.vue';
-import TablePagination from '@/components/style-components/table/TablePagination.vue';
-import BaseModal from '@/components/common/BaseModal.vue';
+import { ref, onMounted, computed, watch } from "vue";
+import UiParentCard from "@/components/shared/UiParentCard.vue";
+import TablePagination from "@/components/style-components/table/TablePagination.vue";
+import BaseModal from "@/components/common/BaseModal.vue";
+import { useGameService } from "@/services/gameService";
+
+const { fetchGames, addGame, updateGame, deleteGame } = useGameService();
 
 const isModalOpen = ref(false);
+const form = ref({ id: null, name: "" });
+const items = ref([]);
+const modalType = ref<"add" | "edit" | "delete" | null>(null);
 
-const openModal = () => {
+// **Ensure reactivity**
+const reactiveItems = computed(() => items.value);
+
+const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
+  modalType.value = type;
+  if (rowData) form.value = { ...rowData };
   isModalOpen.value = true;
 };
 
-const confirmAction = () => {
-  console.log("Confirmed!");
-  isModalOpen.value = false;
+const confirmAction = async () => {
+  try {
+    if (modalType.value === "add") {
+      await addGame(form.value);
+    } else if (modalType.value === "edit" && form.value.id !== null) {
+      await updateGame(form.value.id, form.value);
+    } else if (modalType.value === "delete" && form.value.id !== null) {
+      await deleteGame(form.value.id);
+    }
+    isModalOpen.value = false;
+    items.value = await fetchGames();
+  } catch (error) {
+    console.error("Action failed:", error);
+  }
 };
 
+onMounted(async () => {
+  items.value = await fetchGames();
+  console.log("Fetched Items:", items.value);
+});
 
-const items = ref(Array.from({ length: 100 }, (_, index) => ({
-   id: index + 1,
-   name: `User ${index + 1}`,
-   email: `user${index + 1}@example.com`,
-   age: 20 + index,
-   status: index % 2 === 0 ? 'Active' : 'Inactive',
-   address: `Street ${index + 1}, City, Country`,
-})));
-
-const columns = [
-  { title: 'ID', field: 'id', sortable: true, width: 50 },
-  { title: 'Name', field: 'name', sortable: true, width: 150 },
-  { title: 'Email', field: 'email' },
-  { title: 'Age', field: 'age' },
-  { title: 'Status', field: 'status' },
-  { title: 'Address', field: 'address', width: 200 },
-  { 
-    title: 'Data', 
-    field: 'data', 
-    formatter: (rowData: any) => `
-      <div>
-        <p>Data here</p>
-        <p>${rowData.name}</p>
-        <p>${rowData.age}</p>
-        <p>${rowData.status}</p>
-      </div>
-    `
-  },
-  { 
-    title: 'Actions', 
-    field: 'actions', 
-    actions: (rowData: any, index: number) => [
-      { label: 'Edit', color: 'primary', icon: 'mdi-pencil', onClick: () => {openModal()} },
-      { label: 'Delete', color: 'error', icon: 'mdi-delete', onClick: () => {} }
-    ]
-  }
-];
-
-const buttonList = [
-      { label: 'Add', color: 'primary', icon: 'mdi-plus', onClick: () => {openModal()} },
-      { label: 'Filter', color: 'error', icon: 'mdi-filter', onClick: () => {console.log("ini adalah filter")} }
-    ]
+watch(items, (newItems) => {
+  console.log("Updated items:", newItems);
+});
 </script>
 
 <template>
   <v-row>
     <v-col cols="12">
-      <UiParentCard title="User Table">
+      <UiParentCard title="Games">
         <TablePagination
-          :columns="columns"
-          :items="items"
-          :extraButtons="buttonList"
+          :columns="[
+            { title: 'ID', field: 'id', sortable: true },
+            { title: 'Name', field: 'name', sortable: true },
+            { title: 'Actions', field: 'actions', 
+              actions: (rowData: any) => [
+                { label: 'Edit', color: 'primary', icon: 'mdi-pencil', onClick: () => openModal('edit', rowData) },
+                { label: 'Delete', color: 'error', icon: 'mdi-delete', onClick: () => openModal('delete', rowData) }
+              ] 
+            }
+          ]"
+          :items="reactiveItems"
+          :extraButtons="[{ label: 'Add', color: 'primary', icon: 'mdi-plus', onClick: () => openModal('add') }]"
         />
       </UiParentCard>
     </v-col>
   </v-row>
 
-  <BaseModal v-model="isModalOpen" title="Tambah Data" @confirm="confirmAction">
-    <p>Isi form atau informasi lainnya di sini.</p>
+  <BaseModal v-model="isModalOpen" :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'" @confirm="confirmAction">
+    <template v-if="modalType !== 'delete'">
+      <v-text-field v-model="form.name" label="Name"></v-text-field>
+    </template>
+    <template v-else>
+      <p>Apakah Anda yakin ingin menghapus data ini?</p>
+    </template>
   </BaseModal>
 </template>

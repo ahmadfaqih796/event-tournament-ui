@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
-import { useTable } from '@/composables/useTable';
+import { defineProps, defineEmits, computed, watch } from "vue";
+import { useTable } from "@/composables/useTable";
 
 const props = defineProps<{
   columns: {
@@ -8,13 +8,14 @@ const props = defineProps<{
     field: string;
     sortable?: boolean;
     width?: number;
-    formatter?:
-    Function;
-    actions?: Function,
+    formatter?: Function;
+    actions?: Function;
   }[];
   items: any[];
   extraButtons?: { label: string; color: string; icon: string; onClick: () => void }[];
 }>();
+
+const reactiveItems = computed(() => props.items);
 
 const {
   searchQuery,
@@ -25,9 +26,13 @@ const {
   sortField,
   sortOrder,
   setSort
-} = useTable(props.items);
+} = useTable(reactiveItems as any);
 
 const emit = defineEmits(['update:searchQuery', 'update:pageSize', 'update:currentPage']);
+
+watch(paginatedItems, (newPaginatedItems) => {
+  console.log("Paginated items:", newPaginatedItems);
+});
 </script>
 
 <template>
@@ -62,16 +67,6 @@ const emit = defineEmits(['update:searchQuery', 'update:pageSize', 'update:curre
         <v-btn value="25">25</v-btn>
         <v-btn value="50">50</v-btn>
       </v-btn-toggle>
-      <!-- <v-select
-        v-model="pageSize"
-       @update:model-value="emit('update:pageSize', $event)"
-        :items="[5, 10, 25, 50]"
-        label="Items per page"
-        variant="outlined"
-        density="compact"
-        dense
-      ></v-select> -->
-
       <v-pagination v-model="currentPage" :length="totalPages" rounded="circle" :total-visible="5"></v-pagination>
     </div>
 
