@@ -12,81 +12,33 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum')->except(['index', 'show']);
-        $this->middleware('can:authorization')->except(['index', 'show']);
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        $keyword = $request->input('search');
-
-        // $user = User::with(['events'])
-        //     ->where('name', 'like', "%{$keyword}%")
-        //     ->orWhereHas('events', function ($query) use ($keyword) {
-        //         $query->where('name', 'like', "%{$keyword}%");
-        //     })
-        //     // ->orWhereHas('tournaments', function ($query) use ($keyword) {
-        //     //     $query->where('name', 'like', "%{$keyword}%")
-        //     //         ->orWhere('game', 'like', "%{$keyword}%");
-        //     // })
-        //     ->get();
-
-        $user = User::get();
-
-        return response()->json($user);
+        $users = User::get();
+        return response()->json($users);
     }
 
     public function show($id)
     {
-        $event = User::with('events')->find($id);
-        if (!$event) {
+        $users = User::find($id);
+        if (!$users) {
             return response()->json(['message' => 'User not found'], 404);
         }
-        return response()->json($event);
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'role' => 'nullable|string',
-        ]);
-
-        $event = User::create([
-            'name' => $request->name,
-            'role' => $request->role,
-        ]);
-
-        return response()->json(['message' => 'User created successfully', 'event' => $event], 201);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $event = User::find($id);
-        if (!$event) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'role' => 'nullable|string',
-        ]);
-
-        $event->update([
-            'name' => $request->name,
-            'role' => $request->role,
-        ]);
-
-        return response()->json(['message' => 'User updated successfully', 'event' => $event]);
+        return response()->json($users);
     }
 
     public function destroy($id)
     {
-        $event = User::find($id);
-        if (!$event) {
+        $users = User::find($id);
+        if (!$users) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $event->delete();
+        $users->update([
+            'is_active' => 0
+        ]);
         return response()->json(['message' => 'User deleted successfully']);
     }
 }
