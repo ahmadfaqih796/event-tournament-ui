@@ -18,7 +18,7 @@ export interface menu {
 
 const sidebarItem: menu[] = [
   {
-    header: "Homed",
+    header: "Home",
   },
   {
     title: "Dashboard",
