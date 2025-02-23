@@ -5,6 +5,7 @@ import TablePagination from "@/components/style-components/table/TablePagination
 import { computed, onMounted, ref, watch } from "vue";
 import { useUserService } from "~/services/userService";
 import { useSnackbar } from "~/composables/useSnackbar";
+import { getErrorMessage } from "~/utils/responseMessage";
 
 const { fetchUsers, addUser, updateUser, deleteUser } = useUserService();
 const { showSnackbar } = useSnackbar();
@@ -41,12 +42,9 @@ const confirmAction = async () => {
     }
     isModalOpen.value = false;
     items.value = await fetchUsers();
-  } catch (error) {
+  } catch (error ) {
     console.error("Action failed:", error);
-    if (error) {
-      const message = error.response.data.message;
-      showSnackbar({ message: message, color: "error" });
-    }
+    showSnackbar({ message: getErrorMessage(error), color: "error" });
   } finally {
     isLoading.value = false;
   }
