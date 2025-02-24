@@ -13,9 +13,10 @@ const router = useRouter() as any;
     <!------Sidebar-------->
     <v-navigation-drawer left elevation="0" app class="leftSidebar" v-model="sDrawer">
         <!---Logo part -->
-        <div class="pa-5">
+        <div class="d-flex justify-center align-center py-4">
             <!-- <LayoutFullLogo /> -->
-            <h3 class="text-h3 font-weight-bold text-center">Esport</h3>
+            <img src="/images/background/play-game.png" style="width: 40px;"  alt="background"/>
+            <h3 class="text-h3 font-weight-bold text-center">ESI Padang</h3>
         </div>
         <!-- ---------------------------------------------- -->
         <!---Navigation -->

@@ -38,6 +38,22 @@ const sidebarItem: menu[] = [
     icon: UserPlusIcon,
     to: "/admin/managements/events",
   },
+  { header: "Data" },
+  {
+    title: "Tournaments",
+    icon: UserPlusIcon,
+    to: "/admin/data/tournaments",
+  },
+  {
+    title: "Team",
+    icon: UserPlusIcon,
+    to: "/admin/data/teams",
+  },
+  {
+    title: "Transaksi",
+    icon: UserPlusIcon,
+    to: "/admin/data/transaksi",
+  },
 ];
 
 export default sidebarItem;

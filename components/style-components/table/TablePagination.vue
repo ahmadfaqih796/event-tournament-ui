@@ -97,7 +97,7 @@ watch(paginatedItems, (newPaginatedItems) => {
               <span v-html="col.formatter(item)"></span>
             </template>
             <template v-else-if="col.field === 'actions'">
-              <div class="d-flex align-center justify-center">
+              <div class="d-flex align-center justify-center gap-2">
                 <v-btn v-for="action in col.actions ? col.actions(item) : []" :key="action.label" :color="action.color"
                   :icon="action.icon" @click="action.onClick" density="comfortable">
                   <v-icon>{{ action.icon }}</v-icon>
