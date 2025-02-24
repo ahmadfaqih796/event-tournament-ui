@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\DashboardController;
 use App\Http\Controllers\api\EventController;
 use App\Http\Controllers\api\GameController;
 use App\Http\Controllers\api\NewsController;
@@ -33,6 +34,7 @@ Route::controller(AuthController::class)->middleware(['auth:sanctum'])->group(fu
     Route::get('/me', 'me');
 });
 
+Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 Route::controller(UserController::class)->middleware(['auth:sanctum'])->group(function () {
