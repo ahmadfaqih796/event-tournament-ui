@@ -65,7 +65,6 @@ const filteredSidebarMenu = computed(() => {
                 <!-- <LayoutFullVerticalHeaderNotificationDD /> -->
             </div>
             <div class="d-flex align-center">
-                <div class="text-body-1">{{ JSON.parse(user as any)?.role || '' }}</div>
                 <div class="text-body-1">{{ JSON.parse(user as any)?.name || '' }}</div>
                 <!-- User Profile -->
                 <LayoutFullVerticalHeaderProfileDD />

@@ -6,6 +6,8 @@ import MonthlyEarning from '@/components/dashboard/MonthlyEarnings.vue';
 import RecentTransaction from '@/components/dashboard/RecentTransaction.vue';
 import ProductPerformance from '@/components/dashboard/ProductPerformance.vue';
 import ProductCards from '@/components/dashboard/ProductCards.vue';
+import TransactionOverview from '~/components/dashboard/TransactionOverview.vue';
+import TotalUsers from '~/components/dashboard/TotalUsers.vue';
 </script>
 <template>
     <v-row>
@@ -13,24 +15,25 @@ import ProductCards from '@/components/dashboard/ProductCards.vue';
             <v-row>
                 <!-- Sales overview -->
                 <v-col cols="12" lg="8">
-                    <SalesOverview />
+                    <TransactionOverview />
                 </v-col>
                 <!-- Yearly Breakup / Monthly Earnings -->
                 <v-col cols="12" lg="4">
                     <div class="mb-6">
-                        <YearlyBreakup />
+                        <TotalUsers />
+                        <!-- <YearlyBreakup /> -->
                     </div>
                     <div>
-                        <MonthlyEarning />
+                        <!-- <MonthlyEarning /> -->
                     </div>
                 </v-col>
                 <!-- Recent transaction -->
                 <v-col cols="12" lg="4">
-                    <RecentTransaction />
+                    <!-- <RecentTransaction /> -->
                 </v-col>
                 <!-- Product performence -->
                 <v-col cols="12" lg="8">
-                    <ProductPerformance />
+                    <!-- <ProductPerformance /> -->
                 </v-col>
             </v-row>
         </v-col>
