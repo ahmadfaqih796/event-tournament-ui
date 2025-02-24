@@ -2,6 +2,7 @@ import { LayoutDashboardIcon, UserPlusIcon } from "vue-tabler-icons";
 
 export interface menu {
   header?: string;
+  access?: string[];
   title?: string;
   icon?: any;
   to?: string;
@@ -16,43 +17,57 @@ export interface menu {
 }
 
 const sidebarItem: menu[] = [
-  { header: "Home" },
+  {
+    header: "Home",
+  },
   {
     title: "Dashboard",
     icon: LayoutDashboardIcon,
     to: "/admin/dashboard",
   },
-  { header: "Management" },
+  {
+    header: "Management",
+    access: ["admin", "komunitas"],
+  },
   {
     title: "User",
     icon: UserPlusIcon,
     to: "/admin/managements/users",
+    access: ["admin", "komunitas"],
   },
   {
     title: "Games",
     icon: UserPlusIcon,
     to: "/admin/managements/games",
+    access: ["admin"],
   },
   {
     title: "Events",
     icon: UserPlusIcon,
     to: "/admin/managements/events",
+    access: ["admin", "komunitas"],
   },
-  { header: "Data" },
+  {
+    header: "Data",
+    access: ["admin", "komunitas"],
+  },
   {
     title: "Tournaments",
     icon: UserPlusIcon,
     to: "/admin/data/tournaments",
+    access: ["admin", "komunitas"],
   },
   {
     title: "Team",
     icon: UserPlusIcon,
     to: "/admin/data/teams",
+    access: ["admin", "komunitas"],
   },
   {
     title: "Transaksi",
     icon: UserPlusIcon,
     to: "/admin/data/transaksi",
+    access: ["admin", "komunitas"],
   },
 ];
 

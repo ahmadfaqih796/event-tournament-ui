@@ -7,6 +7,14 @@ const sidebarMenu = shallowRef(sidebarItems);
 const sDrawer = ref(true);
 const { user } = useAuth();
 const router = useRouter() as any;
+const userRole = computed(() => JSON.parse(user.value as any)?.role || "");
+
+const filteredSidebarMenu = computed(() => {
+    return sidebarMenu.value.filter((item) => {
+        if (!item.access) return true;
+        return item.access.includes(userRole.value);
+    });
+});
 </script>
 
 <template>
@@ -15,7 +23,7 @@ const router = useRouter() as any;
         <!---Logo part -->
         <div class="d-flex justify-center align-center py-4">
             <!-- <LayoutFullLogo /> -->
-            <img src="/images/background/play-game.png" style="width: 40px;"  alt="background"/>
+            <img src="/images/background/play-game.png" style="width: 40px;" alt="background" />
             <h3 class="text-h3 font-weight-bold text-center">ESI Padang</h3>
         </div>
         <!-- ---------------------------------------------- -->
@@ -25,7 +33,7 @@ const router = useRouter() as any;
             <perfect-scrollbar class="scrollnavbar">
                 <v-list class="pa-6">
                     <!---Menu Loop -->
-                    <template v-for="(item, i) in sidebarMenu">
+                    <template v-for="(item, i) in filteredSidebarMenu">
                         <!---Item Sub Header -->
                         <LayoutFullVerticalSidebarNavGroup :item="item" v-if="item.header" :key="item.title" />
 
@@ -57,7 +65,7 @@ const router = useRouter() as any;
                 <!-- <LayoutFullVerticalHeaderNotificationDD /> -->
             </div>
             <div class="d-flex align-center">
-
+                <div class="text-body-1">{{ JSON.parse(user as any)?.role || '' }}</div>
                 <div class="text-body-1">{{ JSON.parse(user as any)?.name || '' }}</div>
                 <!-- User Profile -->
                 <LayoutFullVerticalHeaderProfileDD />
