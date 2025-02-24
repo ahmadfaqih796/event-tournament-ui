@@ -33,6 +33,11 @@ const sidebarItem: menu[] = [
     icon: UserPlusIcon,
     to: "/admin/managements/games",
   },
+  {
+    title: "Events",
+    icon: UserPlusIcon,
+    to: "/admin/managements/events",
+  },
 ];
 
 export default sidebarItem;
