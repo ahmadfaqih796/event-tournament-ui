@@ -24,7 +24,11 @@ const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
   if (type === "add") {
     form.value = { id: null, name: "", description: "", start_date: "", end_date: "", location: "" };
-  } else if (rowData) {
+  }
+  else if (type === "edit") {
+    form.value = { ...rowData, start_date: formatDate(rowData.start_date), end_date: formatDate(rowData.end_date) };
+  }
+  else if (rowData) {
     form.value = { ...rowData };
   }
   isModalOpen.value = true;
@@ -89,10 +93,10 @@ watch(items, (newItems) => {
 
           <template #column(start_date)="{ rowData }">
             <div class="d-flex flex-column">
+              <p>Tanggal Mulai</p>
               <p>{{ formatDate(rowData.start_date) }}</p>
+              <p>Tanggal Akhir</p>
               <p>{{ formatDate(rowData.end_date) }}</p>
-
-              sss
             </div>
           </template>
         </TablePagination>
