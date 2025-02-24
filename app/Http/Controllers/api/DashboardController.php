@@ -18,13 +18,35 @@ class DashboardController extends Controller
     {
         $peserta = User::where('role', 'peserta')->get()->count();
         $komunitas = User::where('role', 'komunitas')->get()->count();
-        $finance = Financial::get();
+        // $finance = Financial::get();
         return response()->json(
             [
                 'user' =>
-                    ['peserta' => $peserta, 'komunitas' => $komunitas],
-                'finance' => $finance
+                ['peserta' => $peserta, 'komunitas' => $komunitas],
+                'finance' => $this->financeChartData($request)
             ]
         );
+    }
+
+    private function financeChartData(Request $request)
+    {
+        $year = $request->input('year', date('Y'));
+
+        $data = Financial::selectRaw('MONTH(created_at) as month, SUM(pay) as total_pay')
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $monthlyData = array_fill(1, 12, 0);
+
+        foreach ($data as $row) {
+            $monthlyData[$row->month] = $row->total_pay;
+        }
+
+        return response()->json([
+            'year' => $year,
+            'data' => array_values($monthlyData),
+        ]);
     }
 }
