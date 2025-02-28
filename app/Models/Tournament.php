@@ -13,7 +13,9 @@ class Tournament extends Model
         'event_id',
         'name',
         'game',
-        'status'
+        'is_paid',
+        'price',
+        'close_registration',
     ];
 
     public function event()
