@@ -4,29 +4,50 @@ import UiParentCard from "@/components/shared/UiParentCard.vue";
 import TablePagination from "@/components/style-components/table/TablePagination.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useSnackbar } from "~/composables/useSnackbar";
+import { useEventService } from "~/services/eventService";
+import { useGameService } from "~/services/gameService";
 import { useTournamentService } from "~/services/tournamentService";
 import { formatDate } from "~/utils/formatMoment";
 import { getErrorMessage } from "~/utils/responseMessage";
 
+const STATUS_PAID = [
+  { label: 'Free', value: 0 },
+  { label: 'Paid', value: 1 },
+]
 
 const { fetchTournaments, addTournament, updateTournament, deleteTournament } = useTournamentService();
+const { fetchGames } = useGameService();
+const { fetchEvents } = useEventService();
 const { showSnackbar } = useSnackbar();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
 
-const form = ref({ id: null, name: "", description: "", close_registration: "", end_date: "", location: "" });
+const form = ref({ id: null, name: "", game: "", event_id: "", status: '', price: null, is_paid: 0, close_registration: "" });
 const items = ref([]);
+const fetchData = reactive({
+  games: [],
+  events: []
+})
 const modalType = ref<"add" | "edit" | "delete" | null>(null);
 const reactiveItems = computed(() => items.value);
 
 const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
   if (type === "add") {
-    form.value = { id: null, name: "", description: "", close_registration: "", end_date: "", location: "" };
+    form.value = {
+      id: null,
+      name: "",
+      game: "",
+      event_id: "",
+      status: '',
+      is_paid: 0,
+      price: null,
+      close_registration: ""
+    };
   }
   else if (type === "edit") {
-    form.value = { ...rowData, close_registration: formatDate(rowData.close_registration), end_date: formatDate(rowData.end_date) };
+    form.value = { ...rowData, close_registration: formatDate(rowData.close_registration) };
   }
   else if (rowData) {
     form.value = { ...rowData };
@@ -36,16 +57,21 @@ const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
 
 const confirmAction = async () => {
   isLoading.value = true;
+  const payload = {
+    ...form.value,
+    price: form.value.is_paid ? form.value.price : null
+  };
   try {
     if (modalType.value === "add") {
-      await addTournament(form.value);
-      showSnackbar({ message: "Event berhasil ditambahkan!", color: "success" });
+      console.log("first", payload);
+      await addTournament(payload);
+      showSnackbar({ message: "Tournament berhasil ditambahkan!", color: "success" });
     } else if (modalType.value === "edit" && form.value.id !== null) {
-      await updateTournament(form.value.id, form.value);
-      showSnackbar({ message: "Event berhasil diubah!", color: "success" });
+      await updateTournament(form.value.id, payload);
+      showSnackbar({ message: "Tournament berhasil diubah!", color: "success" });
     } else if (modalType.value === "delete" && form.value.id !== null) {
       await deleteTournament(form.value.id);
-      showSnackbar({ message: "Event berhasil dihapus!", color: "success" });
+      showSnackbar({ message: "Tournament berhasil dihapus!", color: "success" });
     }
     isModalOpen.value = false;
     items.value = await fetchTournaments();
@@ -60,6 +86,13 @@ const confirmAction = async () => {
 onMounted(async () => {
   items.value = await fetchTournaments();
   console.log("Fetched Items:", items.value);
+  const responseFetch = {
+    games: await fetchGames(),
+    events: await fetchEvents()
+
+  }
+  fetchData.games = responseFetch.games;
+  fetchData.events = responseFetch.events;
 });
 
 watch(items, (newItems) => {
@@ -120,10 +153,14 @@ watch(items, (newItems) => {
     @confirm="confirmAction">
     <template v-if="modalType !== 'delete'">
       <v-text-field v-model="form.name" label="Name"></v-text-field>
-      <v-text-field v-model="form.description" label="Description"></v-text-field>
-      <v-text-field v-model="form.close_registration" type="date" label="Start Date"></v-text-field>
-      <v-text-field v-model="form.end_date" type="date" label="End Date"></v-text-field>
-      <v-text-field v-model="form.location" label="Location"></v-text-field>
+      <v-autocomplete v-model="form.game" :items="fetchData.games" item-title="name" item-value="name" label="Game"
+        clearable></v-autocomplete>
+      <v-autocomplete v-model="form.event_id" :items="fetchData.events" item-title="name" item-value="id"
+        label="Event" clearable></v-autocomplete>
+      <v-select v-model="form.is_paid" :items="STATUS_PAID" item-title="label" item-value="value"
+        label="Status"></v-select>
+      <v-text-field v-model="form.price" label="Price" v-if="form.is_paid"></v-text-field>
+      <v-text-field v-model="form.close_registration" type="date" label="Close Registration"></v-text-field>
     </template>
     <template v-else>
       <p>Apakah Anda yakin ingin menghapus data ini?</p>
