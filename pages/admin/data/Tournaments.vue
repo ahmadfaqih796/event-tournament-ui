@@ -4,18 +4,18 @@ import UiParentCard from "@/components/shared/UiParentCard.vue";
 import TablePagination from "@/components/style-components/table/TablePagination.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useSnackbar } from "~/composables/useSnackbar";
-import { useEventService } from "~/services/eventService";
+import { useTournamentService } from "~/services/tournamentService";
 import { formatDate } from "~/utils/formatMoment";
 import { getErrorMessage } from "~/utils/responseMessage";
 
 
-const { fetchEvents, addEvent, updateEvent, deleteEvent } = useEventService();
+const { fetchTournaments, addTournament, updateTournament, deleteTournament } = useTournamentService();
 const { showSnackbar } = useSnackbar();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
 
-const form = ref({ id: null, name: "", description: "", start_date: "", end_date: "", location: "" });
+const form = ref({ id: null, name: "", description: "", close_registration: "", end_date: "", location: "" });
 const items = ref([]);
 const modalType = ref<"add" | "edit" | "delete" | null>(null);
 const reactiveItems = computed(() => items.value);
@@ -23,10 +23,10 @@ const reactiveItems = computed(() => items.value);
 const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
   if (type === "add") {
-    form.value = { id: null, name: "", description: "", start_date: "", end_date: "", location: "" };
+    form.value = { id: null, name: "", description: "", close_registration: "", end_date: "", location: "" };
   }
   else if (type === "edit") {
-    form.value = { ...rowData, start_date: formatDate(rowData.start_date), end_date: formatDate(rowData.end_date) };
+    form.value = { ...rowData, close_registration: formatDate(rowData.close_registration), end_date: formatDate(rowData.end_date) };
   }
   else if (rowData) {
     form.value = { ...rowData };
@@ -38,17 +38,17 @@ const confirmAction = async () => {
   isLoading.value = true;
   try {
     if (modalType.value === "add") {
-      await addEvent(form.value);
+      await addTournament(form.value);
       showSnackbar({ message: "Event berhasil ditambahkan!", color: "success" });
     } else if (modalType.value === "edit" && form.value.id !== null) {
-      await updateEvent(form.value.id, form.value);
+      await updateTournament(form.value.id, form.value);
       showSnackbar({ message: "Event berhasil diubah!", color: "success" });
     } else if (modalType.value === "delete" && form.value.id !== null) {
-      await deleteEvent(form.value.id);
+      await deleteTournament(form.value.id);
       showSnackbar({ message: "Event berhasil dihapus!", color: "success" });
     }
     isModalOpen.value = false;
-    items.value = await fetchEvents();
+    items.value = await fetchTournaments();
   } catch (error) {
     console.error("Action failed:", error);
     showSnackbar({ message: getErrorMessage(error), color: "error" });
@@ -58,7 +58,7 @@ const confirmAction = async () => {
 };
 
 onMounted(async () => {
-  items.value = await fetchEvents();
+  items.value = await fetchTournaments();
   console.log("Fetched Items:", items.value);
 });
 
@@ -74,13 +74,27 @@ watch(items, (newItems) => {
         <TablePagination :columns="[
           { title: 'No', field: 'no', sortable: true, width: 80 },
           { title: 'Name', field: 'name', sortable: true },
-          { title: 'Description', field: 'description', sortable: true },
+          { title: 'Game', field: 'game', sortable: true },
           {
-            title: 'Acara',
-            field: 'start_date',
+            title: 'Event', field: 'event', sortable: true,
+            formatter: (rowData: any) => `
+              <div>
+                <p class='font-weight-bold text-center'>${rowData.event.name}</p>
+              </div>`
+          },
+          {
+            title: 'Status', field: 'is_paid', sortable: true,
+            formatter: (rowData: any) => rowData.is_paid ? `
+              <div><p class='font-weight-bold text-error text-center'>${rowData.price}</p></div>` : `
+              <div>
+                <p class='font-weight-bold text-${rowData.is_paid ? 'error' : 'success'} text-center'>${rowData.is_paid ? 'Paid' : 'Free'}</p>
+              </div>`
+          },
+          {
+            title: 'Tutup Pendaftaran',
+            field: 'close_registration',
             sortable: true
           },
-          { title: 'Location', field: 'location' },
           {
             title: 'Actions', field: 'actions', width: 150,
             actions: (rowData: any) => [
@@ -91,12 +105,9 @@ watch(items, (newItems) => {
         ]" :items="reactiveItems"
           :extraButtons="[{ label: 'Add', color: 'primary', icon: 'mdi-plus', onClick: () => openModal('add') }]">
 
-          <template #column(start_date)="{ rowData }">
+          <template #column(close_registration)="{ rowData }">
             <div class="d-flex flex-column">
-              <p>Tanggal Mulai</p>
-              <p>{{ formatDate(rowData.start_date) }}</p>
-              <p>Tanggal Akhir</p>
-              <p>{{ formatDate(rowData.end_date) }}</p>
+              <p>{{ formatDate(rowData.close_registration) }}</p>
             </div>
           </template>
         </TablePagination>
@@ -110,7 +121,7 @@ watch(items, (newItems) => {
     <template v-if="modalType !== 'delete'">
       <v-text-field v-model="form.name" label="Name"></v-text-field>
       <v-text-field v-model="form.description" label="Description"></v-text-field>
-      <v-text-field v-model="form.start_date" type="date" label="Start Date"></v-text-field>
+      <v-text-field v-model="form.close_registration" type="date" label="Start Date"></v-text-field>
       <v-text-field v-model="form.end_date" type="date" label="End Date"></v-text-field>
       <v-text-field v-model="form.location" label="Location"></v-text-field>
     </template>
