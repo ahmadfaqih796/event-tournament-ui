@@ -27,7 +27,7 @@ const sidebarItem: menu[] = [
   },
   {
     header: "Management",
-    access: ["admin", "komunitas"],
+    access: ["admin", "komunitas", "peserta"],
   },
   {
     title: "User",
@@ -46,6 +46,12 @@ const sidebarItem: menu[] = [
     icon: UserPlusIcon,
     to: "/admin/managements/events",
     access: ["admin", "komunitas"],
+  },
+  {
+    title: "Account Games",
+    icon: UserPlusIcon,
+    to: "/admin/managements/accountgames",
+    access: ["peserta"],
   },
   {
     header: "Data",
@@ -68,6 +74,16 @@ const sidebarItem: menu[] = [
     icon: UserPlusIcon,
     to: "/admin/data/transaksi",
     access: ["admin", "komunitas"],
+  },
+  {
+    header: "Setting",
+    access: ["admin", "komunitas", "peserta"],
+  },
+  {
+    title: "Profile",
+    icon: UserPlusIcon,
+    to: "/admin/setting/profile",
+    access: ["admin", "komunitas", "peserta"],
   },
 ];
 
