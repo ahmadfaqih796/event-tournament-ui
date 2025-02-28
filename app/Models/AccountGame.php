@@ -23,6 +23,6 @@ class AccountGame extends Model
 
     public function game()
     {
-        return $this->belongsTo(User::class, 'game_id')->select('id', 'name');
+        return $this->belongsTo(Game::class, 'game_id')->select('id', 'name');
     }
 }

@@ -45,10 +45,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public function events()
-    // {
-    //     return $this->hasMany(Event::class, 'created_by')->select('created_by', 'name', 'location');
-    // }
+    public function accountGames()
+    {
+        return $this->hasMany(AccountGame::class, 'user_id')->with(['game'])->select('user_id', 'game_id','name', 'account');
+    }
 
     // public function teams()
     // {
