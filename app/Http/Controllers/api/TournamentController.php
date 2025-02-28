@@ -38,10 +38,9 @@ class TournamentController extends Controller
                 'event_id' => 'required|exists:events,id',
                 'game' => 'required|string|max:255',
                 'is_paid' => 'required|boolean',
-                "price" => 'required|string|max:255',
-                'open_date'  => 'required|date',
-                'close_date' => 'required|date|after_or_equal:open_date',
-                'status' => 'required|in:pending,ongoing,completed'
+                "price" => 'nullable|string|max:255',
+                'close_registration'  => 'required|date',
+                // 'status' => 'required|in:pending,ongoing,completed'
             ]
         );
 
@@ -51,11 +50,48 @@ class TournamentController extends Controller
             'game' => $request->game,
             'is_paid' => $request->is_paid,
             'price' => $request->price,
-            'open_date' => $request->open_date,
-            'close_date' => $request->close_date,
-            'status' => $request->status,
+            'close_registration' => $request->close_registration,
         ]);
 
         return response()->json(['message' => 'Tournament created successfully', 'tournament' => $data], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = Tournament::find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Tournament not found'], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'event_id' => 'required|exists:events,id',
+            'game' => 'required|string|max:255',
+            'is_paid' => 'required|boolean',
+            "price" => 'nullable|string|max:255',
+            'close_registration'  => 'required|date',
+        ]);
+
+        $data->update([
+            'name' => $request->name,
+            'event_id' => $request->event_id,
+            'game' => $request->game,
+            'is_paid' => $request->is_paid,
+            'price' => $request->price,
+            'close_registration' => $request->close_registration,
+        ]);
+
+        return response()->json(['message' => 'Tournament updated successfully', 'data' => $data]);
+    }
+
+    public function destroy($id)
+    {
+        $data = Tournament::find($id);
+        if (!$data) {
+            return response()->json(['message' => 'Tournament not found'], 404);
+        }
+
+        $data->delete();
+        return response()->json(['message' => 'Tournament deleted successfully']);
     }
 }

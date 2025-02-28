@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\AccountGameController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\DashboardController;
 use App\Http\Controllers\api\EventController;
@@ -41,6 +42,14 @@ Route::controller(UserController::class)->middleware(['auth:sanctum'])->group(fu
     Route::post('/users', 'store');
     Route::put('/users/{id}', 'update');
     Route::delete('/users/{id}', 'destroy');
+});
+
+Route::controller(AccountGameController::class)->middleware(['auth:sanctum'])->group(function () {
+    Route::get('/account-game', 'index');
+Route::get('/account-game/{id}', 'show');
+    Route::post('/account-game', 'store');
+    Route::put('/account-game/{id}', 'update');
+    Route::delete('/account-game/{id}', 'destroy');
 });
 
 Route::get('/tournaments', [TournamentController::class, 'index']);
