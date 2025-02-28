@@ -6,7 +6,7 @@ useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
       ? `${titleChunk} - 404-Page Not Found`
-      : "Esport Padang - Nuxt3 Typescript based Free Admin Dashboard Template";
+      : "Esport Merdeka";
   },
 });
 </script>

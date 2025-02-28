@@ -13,7 +13,7 @@ definePageMeta({
                         <v-card-item class="pa-sm-8">
                             <div class="d-flex justify-center py-4">
                                 <!-- <LayoutFullLogo /> -->
-                                 <h3 class="text-h3">Esport Padang</h3>
+                                 <h3 class="text-h3">Esport Merdeka</h3>
                             </div>
                             <!-- <div class="text-body-1 text-muted text-center mb-3">Your Social Campaigns</div> -->
                             <AuthLoginForm />

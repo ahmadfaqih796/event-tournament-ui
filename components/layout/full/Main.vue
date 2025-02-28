@@ -24,7 +24,7 @@ const filteredSidebarMenu = computed(() => {
         <div class="d-flex justify-center align-center py-4">
             <!-- <LayoutFullLogo /> -->
             <img src="/images/background/play-game.png" style="width: 40px;" alt="background" />
-            <h3 class="text-h3 font-weight-bold text-center">ESI Padang</h3>
+            <h3 class="text-h3 font-weight-bold text-center">Esport Merdeka</h3>
         </div>
         <!-- ---------------------------------------------- -->
         <!---Navigation -->
