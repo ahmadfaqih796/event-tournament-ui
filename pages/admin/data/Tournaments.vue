@@ -103,7 +103,7 @@ watch(items, (newItems) => {
 <template>
   <v-row>
     <v-col cols="12">
-      <UiParentCard title="Events">
+      <UiParentCard title="Tournaments">
         <TablePagination :columns="[
           { title: 'No', field: 'no', sortable: true, width: 80 },
           { title: 'Name', field: 'name', sortable: true },
