@@ -51,7 +51,7 @@ const sidebarItem: menu[] = [
     title: "Account Games",
     icon: UserPlusIcon,
     to: "/admin/managements/accountgames",
-    access: ["peserta"],
+    access: ["peserta", 'admin'],
   },
   {
     header: "Data",
