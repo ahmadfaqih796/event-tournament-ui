@@ -1,13 +1,31 @@
 <script setup lang="ts">
 /*Call Components*/
- import SalesOverview from '@/components/dashboard/SalesOverview.vue';
-import YearlyBreakup from '@/components/dashboard/YearlyBreakup.vue';
-import MonthlyEarning from '@/components/dashboard/MonthlyEarnings.vue';
-import RecentTransaction from '@/components/dashboard/RecentTransaction.vue';
-import ProductPerformance from '@/components/dashboard/ProductPerformance.vue';
-import ProductCards from '@/components/dashboard/ProductCards.vue';
+ import TotalUsers from '~/components/dashboard/TotalUsers.vue';
 import TransactionOverview from '~/components/dashboard/TransactionOverview.vue';
-import TotalUsers from '~/components/dashboard/TotalUsers.vue';
+import { useDashboard } from '~/services/dashboardService';
+
+const { fetchDashboard } = useDashboard();
+const dashboardData = reactive({
+  user: [],
+  finance: []
+});
+
+const select = ref("2025");
+const items = ref(["2025", "2026", "2027"]);
+
+const loadDashboard = async (year : string) => {
+  const data = await fetchDashboard(year) as any;
+  dashboardData.user = data.user;
+  dashboardData.finance = data.finance;
+}
+
+onMounted(() => loadDashboard('2025'));
+watch(select, (newYear) => {
+  loadDashboard(newYear);
+});
+
+
+
 </script>
 <template>
     <v-row>
@@ -15,25 +33,16 @@ import TotalUsers from '~/components/dashboard/TotalUsers.vue';
             <v-row>
                 <!-- Sales overview -->
                 <v-col cols="12" lg="8">
-                    <TransactionOverview />
+                    <TransactionOverview :data ="dashboardData.finance" />
                 </v-col>
                 <!-- Yearly Breakup / Monthly Earnings -->
                 <v-col cols="12" lg="4">
                     <div class="mb-6">
-                        <TotalUsers />
-                        <!-- <YearlyBreakup /> -->
+                        <TotalUsers  :data ="dashboardData.user"/>
                     </div>
-                    <div>
-                        <!-- <MonthlyEarning /> -->
-                    </div>
-                </v-col>
-                <!-- Recent transaction -->
-                <v-col cols="12" lg="4">
-                    <!-- <RecentTransaction /> -->
-                </v-col>
-                <!-- Product performence -->
-                <v-col cols="12" lg="8">
-                    <!-- <ProductPerformance /> -->
+                    <!-- <div>
+                        <MonthlyEarning />
+                    </div> -->
                 </v-col>
             </v-row>
         </v-col>
