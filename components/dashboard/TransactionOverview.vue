@@ -6,18 +6,21 @@ import { useDashboard } from "~/services/dashboardService";
 
 const { fetchDashboard } = useDashboard();
 const financeData = ref([]);
-const loadDashboard = async () => {
-  const data = await fetchDashboard("2025");
-  console.log("ddddddddddd", data.finance.original.data)
-  financeData.value = data.finance.original.data;
-};
-onMounted(loadDashboard);
-console.log("masukkkk", financeData.value);
+
 
 const theme = useTheme();
 const primary = theme.current.value.colors.primary;
 const select = ref("2025");
 const items = ref(["2025", "2026", "2027"]);
+
+const loadDashboard = async (year : string) => {
+  const data = await fetchDashboard(year);
+  financeData.value = data.finance.original.data;
+};
+onMounted(() => loadDashboard(select.value));
+watch(select, (newYear) => {
+  loadDashboard(newYear);
+});
 
 const chartOptions = computed(() => {
   return {
@@ -25,7 +28,8 @@ const chartOptions = computed(() => {
       {
         name: "Pemasukan",
         type: "line",
-        data: [2000, 3000, 7000, 4000, 2000, 3000, 7000, 4000, 2000, 3000, 7000, 4000],
+        // data: [2000, 3000, 7000, 4000, 2000, 3000, 7000, 4000, 2000, 3000, 7000, 4000],
+        data: financeData.value || [] ,
       },
     ],
     chartOptions: {
