@@ -32,7 +32,7 @@ const confirmAction = async () => {
   try {
     if (modalType.value === "add") {
       await addGame(form.value);
-      showSnackbar({ message: "Game berhasil ditambahkan!", color: "success" } );
+      showSnackbar({ message: "Game berhasils ditambahkan!", color: "success" } );
     } else if (modalType.value === "edit" && form.value.id !== null) {
       await updateGame(form.value.id, form.value);
       showSnackbar({ message: "Game berhasil diubah!", color: "success" });
