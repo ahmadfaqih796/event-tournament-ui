@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useTheme } from "vuetify";
-import { useDashboard } from "~/services/dashboardService";
 
+const props = defineProps<{
+  data?: any;
+  modelValue: string;
+}>();
 
-const { fetchDashboard } = useDashboard();
-const financeData = ref([]);
-const loadDashboard = async () => {
-  const data = await fetchDashboard("2025");
-  console.log("ddddddddddd", data.finance.original.data)
-  financeData.value = data.finance.original.data;
-};
-onMounted(loadDashboard);
-console.log("masukkkk", financeData.value);
+const emit = defineEmits(["update:modelValue"]);
 
 const theme = useTheme();
 const primary = theme.current.value.colors.primary;
-const select = ref("2025");
+
+const select = ref(props.modelValue);
 const items = ref(["2025", "2026", "2027"]);
+
+const dataFinance = computed(() => props.data || []);
 
 const chartOptions = computed(() => {
   return {
@@ -25,7 +23,7 @@ const chartOptions = computed(() => {
       {
         name: "Pemasukan",
         type: "line",
-        data: [2000, 3000, 7000, 4000, 2000, 3000, 7000, 4000, 2000, 3000, 7000, 4000],
+        data: dataFinance.value || [],
       },
     ],
     chartOptions: {
@@ -75,6 +73,10 @@ const chartOptions = computed(() => {
     },
   };
 });
+
+watch(select, (newYear) => {
+  emit("update:modelValue", newYear);
+});
 </script>
 
 <template>
@@ -85,22 +87,11 @@ const chartOptions = computed(() => {
           <v-card-title class="text-h5">Transaction Overview</v-card-title>
         </div>
         <div class="my-sm-0 my-2">
-          <v-select
-            v-model="select"
-            :items="items"
-            variant="outlined"
-            density="compact"
-            hide-details
-          ></v-select>
+          <v-select v-model="select" :items="items" variant="outlined" density="compact" hide-details></v-select>
         </div>
       </div>
       <div class="mt-6">
-        <apexchart
-          type="line"
-          height="370px"
-          :options="chartOptions.chartOptions"
-          :series="chartOptions.series"
-        />
+        <apexchart type="line" height="370px" :options="chartOptions.chartOptions" :series="chartOptions.series" />
       </div>
     </v-card-item>
   </v-card>

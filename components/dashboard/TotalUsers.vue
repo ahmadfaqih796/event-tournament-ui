@@ -1,12 +1,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useTheme } from "vuetify";
+
+const props = defineProps<{
+  data?: any;
+}>()
+
 const theme = useTheme();
 const primary = theme.current.value.colors.primary;
 const lightprimary = theme.current.value.colors.lightprimary;
+const dataUser = computed(() => props.data ? Object.values(props.data) : []);
+const totalUsers = computed(() =>
+  props.data ? Object.values(props.data).reduce((acc, val) => acc as any + val as any, 0) : 0
+);
+
 const chartOptions = computed(() => {
   return {
-    labels: ["series-1", "series-2", "series-3"],
+    labels: ["Komunitas", "Peserta"],
     chart: {
       type: "donut",
       fontFamily: `inherit`,
@@ -38,8 +48,7 @@ const chartOptions = computed(() => {
     },
     tooltip: { theme: "light", fillSeriesColor: false },
   };
-});
-const Chart = [38, 40, 25];
+});;
 </script>
 <template>
   <v-card elevation="10" class="withbg">
@@ -50,7 +59,7 @@ const Chart = [38, 40, 25];
       <v-row>
         <v-col cols="7" sm="7">
           <div class="mt-6">
-            <h3 class="text-h1">18</h3>
+            <h3 class="text-h1">{{ totalUsers }}</h3>
             <div class="d-flex align-center mt-sm-12 mt-10">
               <h6 class="text-subtitle-1 text-muted">
                 <v-icon
@@ -80,7 +89,7 @@ const Chart = [38, 40, 25];
               type="donut"
               height="145"
               :options="chartOptions"
-              :series="Chart"
+              :series="dataUser"
             >
             </apexchart>
           </div>
