@@ -47,11 +47,17 @@ const sidebarItem: menu[] = [
     to: "/admin/managements/events",
     access: ["admin", "komunitas"],
   },
+  // {
+  //   title: "Account Games",
+  //   icon: UserPlusIcon,
+  //   to: "/admin/managements/accountgames",
+  //   access: ["peserta", 'admin'],
+  // },
   {
-    title: "Account Games",
+    title: "Teams",
     icon: UserPlusIcon,
-    to: "/admin/managements/accountgames",
-    access: ["peserta", 'admin'],
+    to: "/admin/managements/teams",
+    access: ["admin", "peserta"],
   },
   {
     header: "Data",
