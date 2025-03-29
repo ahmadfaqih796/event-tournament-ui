@@ -3,9 +3,9 @@ import { useNuxtApp } from "#app";
 export const useTournamentRegistrationService = () => {
   const { $axios } = useNuxtApp();
 
-  const fetchTournaments = async () => {
+  const fetchTransactionTournaments = async () => {
     try {
-      const response = await $axios.get("/open-tournaments");
+      const response = await $axios.get("/tournament-registration");
       const dataMap = response.data.map((item: any, index: number) => {
         return {
           ...item,
@@ -18,6 +18,22 @@ export const useTournamentRegistrationService = () => {
       return [];
     }
   };
+
+  const fetchTournaments = async () => {
+   try {
+     const response = await $axios.get("/open-tournaments");
+     const dataMap = response.data.map((item: any, index: number) => {
+       return {
+         ...item,
+         no: index + 1,
+       };
+     });
+     return dataMap;
+   } catch (error) {
+     console.error("Error fetching tournaments:", error);
+     return [];
+   }
+ };
 
   const addTransaction = async (tournamentData: any) => {
     try {
@@ -34,6 +50,7 @@ export const useTournamentRegistrationService = () => {
   };
 
   return {
+    fetchTransactionTournaments,
     fetchTournaments,
     addTransaction
   };
