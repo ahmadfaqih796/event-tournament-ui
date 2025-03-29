@@ -82,6 +82,16 @@ const sidebarItem: menu[] = [
     access: ["admin", "komunitas"],
   },
   {
+    header: "Information",
+    access: ["peserta"],
+  },
+  {
+    title: "Tournament",
+    icon: UserPlusIcon,
+    to: "/admin/info/tournaments",
+    access: ["peserta"],
+  },
+  {
     header: "Setting",
     access: ["admin", "komunitas", "peserta"],
   },
