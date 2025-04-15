@@ -83,13 +83,19 @@ const sidebarItem: menu[] = [
   },
   {
     header: "Information",
-    access: ["peserta"],
+    access: ["peserta", "komunitas"],
   },
   {
     title: "Tournament",
     icon: UserPlusIcon,
     to: "/admin/info/tournaments",
     access: ["peserta"],
+  },
+  {
+    title: "Transaksi",
+    icon: UserPlusIcon,
+    to: "/admin/info/transactions",
+    access: ["peserta", "komunitas"],
   },
   {
     header: "Setting",
