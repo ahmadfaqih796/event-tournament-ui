@@ -70,15 +70,9 @@ const sidebarItem: menu[] = [
     access: ["admin", "komunitas"],
   },
   {
-    title: "Team",
+    title: "Berita",
     icon: UserPlusIcon,
-    to: "/admin/data/teams",
-    access: ["admin", "komunitas"],
-  },
-  {
-    title: "Transaksi",
-    icon: UserPlusIcon,
-    to: "/admin/data/transaksi",
+    to: "/admin/data/berita",
     access: ["admin", "komunitas"],
   },
   {

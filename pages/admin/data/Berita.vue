@@ -4,18 +4,23 @@ import UiParentCard from "@/components/shared/UiParentCard.vue";
 import TablePagination from "@/components/style-components/table/TablePagination.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useSnackbar } from "~/composables/useSnackbar";
-import { useEventService } from "~/services/eventService";
+import { useBeritaService } from "~/services/beritaService";
 import { formatDate } from "~/utils/formatMoment";
 import { getErrorMessage } from "~/utils/responseMessage";
 
+const CATEGORY_LIST = [
+  { label: 'Game', value: "game" },
+  { label: 'Event', value: "event" },
+  { label: 'Sponsor', value: "sponsor" },
+]
 
-const { fetchEvents, addEvent, updateEvent, deleteEvent } = useEventService();
+const { fetchBerita, addBerita, updateBerita, deleteBerita } = useBeritaService();
 const { showSnackbar } = useSnackbar();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
 
-const form = ref({ id: null, name: "", description: "", start_date: "", end_date: "", location: "" });
+const form = ref({ id: null, title: "", content: "", category: "", image: "" });
 const items = ref([]);
 const modalType = ref<"add" | "edit" | "delete" | null>(null);
 const reactiveItems = computed(() => items.value);
@@ -23,10 +28,10 @@ const reactiveItems = computed(() => items.value);
 const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
   if (type === "add") {
-    form.value = { id: null, name: "", description: "", start_date: "", end_date: "", location: "" };
+    form.value = { id: null, title: "", content: "", category: "", image: "" };
   }
   else if (type === "edit") {
-    form.value = { ...rowData, start_date: formatDate(rowData.start_date), end_date: formatDate(rowData.end_date) };
+    form.value = { ...rowData, image: "" };
   }
   else if (rowData) {
     form.value = { ...rowData };
@@ -37,18 +42,27 @@ const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
 const confirmAction = async () => {
   isLoading.value = true;
   try {
+    const formData = new FormData();
+    const payload = {
+      ...form.value,
+    };
+    formData.append("title", payload.title);
+    formData.append("content", payload.content);
+    formData.append("category", payload.category);
+    formData.append("image", payload.image[0]);
     if (modalType.value === "add") {
-      await addEvent(form.value);
-      showSnackbar({ message: "Event berhasil ditambahkan!", color: "success" });
+      console.log("rerereer", formData)
+      await addBerita(formData);
+      showSnackbar({ message: "Berita berhasil ditambahkan!", color: "success" });
     } else if (modalType.value === "edit" && form.value.id !== null) {
-      await updateEvent(form.value.id, form.value);
-      showSnackbar({ message: "Event berhasil diubah!", color: "success" });
+      await updateBerita(form.value.id, formData);
+      showSnackbar({ message: "Berita berhasil diubah!", color: "success" });
     } else if (modalType.value === "delete" && form.value.id !== null) {
-      await deleteEvent(form.value.id);
-      showSnackbar({ message: "Event berhasil dihapus!", color: "success" });
+      await deleteBerita(form.value.id);
+      showSnackbar({ message: "Berita berhasil dihapus!", color: "success" });
     }
     isModalOpen.value = false;
-    items.value = await fetchEvents();
+    items.value = await fetchBerita();
   } catch (error) {
     console.error("Action failed:", error);
     showSnackbar({ message: getErrorMessage(error), color: "error" });
@@ -58,7 +72,7 @@ const confirmAction = async () => {
 };
 
 onMounted(async () => {
-  items.value = await fetchEvents();
+  items.value = await fetchBerita();
   console.log("Fetched Items:", items.value);
 });
 
@@ -70,17 +84,24 @@ watch(items, (newItems) => {
 <template>
   <v-row>
     <v-col cols="12">
-      <UiParentCard title="Teams">
+      <UiParentCard title="Berita">
         <TablePagination :columns="[
           { title: 'No', field: 'no', sortable: true, width: 80 },
-          { title: 'Name', field: 'name', sortable: true },
-          { title: 'Description', field: 'description', sortable: true },
+          { title: 'Judul', field: 'title', sortable: true },
+          { title: 'Deskripsi', field: 'content' },
+          { title: 'Kategori', field: 'category' },
           {
-            title: 'Acara',
-            field: 'start_date',
-            sortable: true
+            title: 'Bukti', field: 'bukti', sortable: true,
+            formatter: (rowData: any) => {
+              return rowData.image
+                ? `<div>
+                        <a href='http://127.0.0.1:8000/storage/${rowData.image}' target='_blank'>
+                        <img src='http://127.0.0.1:8000/storage/${rowData.image}' style='width: 100px; height: 100px; object-fit: cover;'' />
+                        </a>
+            </div>`
+                : '';
+            }
           },
-          { title: 'Location', field: 'location' },
           {
             title: 'Actions', field: 'actions', width: 150,
             actions: (rowData: any) => [
@@ -108,11 +129,11 @@ watch(items, (newItems) => {
     :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'"
     @confirm="confirmAction">
     <template v-if="modalType !== 'delete'">
-      <v-text-field v-model="form.name" label="Name"></v-text-field>
-      <v-text-field v-model="form.description" label="Description"></v-text-field>
-      <v-text-field v-model="form.start_date" type="date" label="Start Date"></v-text-field>
-      <v-text-field v-model="form.end_date" type="date" label="End Date"></v-text-field>
-      <v-text-field v-model="form.location" label="Location"></v-text-field>
+      <v-text-field v-model="form.title" label="Judul"></v-text-field>
+      <v-text-field v-model="form.content" label="Description"></v-text-field>
+      <v-select v-model="form.category" :items="CATEGORY_LIST" item-title="label" item-value="value"
+        label="Kategori"></v-select>
+      <v-file-input v-model="form.image" label="Upload Gambar"></v-file-input>
     </template>
     <template v-else>
       <p>Apakah Anda yakin ingin menghapus data ini?</p>

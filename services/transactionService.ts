@@ -19,7 +19,18 @@ export const useTransactionService = () => {
    }
  };
 
+ const updateTransaction = async (id: number, gameData: any) => {
+   try {
+     const response = await $axios.put(`/tournament-registration/${id}`, gameData);
+     return response.data;
+   } catch (error) {
+     console.error("Error updating user:", error);
+     throw error;
+   }
+ };
+
   return {
     fetchTransactions,
+    updateTransaction
   };
 };
