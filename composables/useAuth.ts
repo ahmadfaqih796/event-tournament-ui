@@ -27,6 +27,19 @@ export const useAuth = () => {
     }
   };
 
+  const register = async (values : any) => {
+    loading.value = true;
+    try {
+      await $axios.post("/register", values);
+      return true;
+    } catch (err) {
+      error.value = "Login gagal!";
+      return false;
+    } finally {
+      loading.value = false;
+    }
+  };
+
   const logout = async () => {
     try {
       const response = await $axios.post("/logout", {});
@@ -62,6 +75,7 @@ export const useAuth = () => {
 
   return {
     login,
+    register,
     logout,
     getSession,
     user,
