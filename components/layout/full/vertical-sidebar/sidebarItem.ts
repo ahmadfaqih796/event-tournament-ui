@@ -33,7 +33,7 @@ const sidebarItem: menu[] = [
     title: "User",
     icon: UserPlusIcon,
     to: "/admin/managements/users",
-    access: ["admin", "komunitas"],
+    access: ["admin"],
   },
   {
     title: "Games",
