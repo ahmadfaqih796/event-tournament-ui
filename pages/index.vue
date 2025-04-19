@@ -1,105 +1,142 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+import { useGameService } from '~/services/gameService';
+
+definePageMeta({
+  layout: "blank",
+});
+
+const images = [
+  "https://img.freepik.com/free-photo/esports-championship-background-3d-illustration_1419-2785.jpg",
+  "https://wallpapercave.com/wp/wp5195928.jpg",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTebcyrBnbm-6Qz9jy2no4LY0EFB0HNjyXG5g&s"
+]
+const currentImage = ref(0)
+const mobileMenu = ref(false)
+const items = ref({
+  game : [],
+  tournament: []
+});
+const { fetchGames } = useGameService();
+
+const eventList = [
+  { title: "HFG Januari MLBB 06", date: "31 Jan 2025", image: "" },
+  { title: "HFG Januari MLBB 05", date: "31 Jan 2025", image: "" },
+  { title: "HFG Januari MLBB 04", date: "31 Jan 2025", image: "" },
+  { title: "HFG Januari MLBB 03", date: "31 Jan 2025", image: "" }
+]
+
+console.log("gammmmmm", items)
+onMounted(async () => {
+  items.value.game = await fetchGames();
+  setInterval(() => {
+    currentImage.value = (currentImage.value + 1) % images.length
+  }, 5000)
+})
+</script>
+
 <template>
   <div>
-    <Header />
+    <header class="fixed top-0 left-0 w-full bg-red-600 z-50">
+      <div class="container mx-auto flex justify-between items-center py-4 px-4 lg:px-[15%]">
+        <div class="flex items-center">
+          <img
+            src="https://e7.pngegg.com/pngimages/976/842/png-clipart-esport-logo-logo-esport-logo-leave-the-material-thumbnail.png"
+            alt="Logo" class="h-8 mr-4" />
+          <nav :class="['md:flex', mobileMenu ? 'flex' : 'hidden', 'flex-col md:flex-row md:space-x-6']">
+            <a href="#home" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
+            <a href="#game" class="text-white hover:text-gray-200 py-2 md:py-0">Game</a>
+            <a href="#event" class="text-white hover:text-gray-200 py-2 md:py-0">Event</a>
+            <a href="#tournament" class="text-white hover:text-gray-200 py-2 md:py-0">Tournament</a>
+          </nav>
+        </div>
+        <div class="flex items-center space-x-4">
+          <!-- <NuxtLink to="/auth/login" class="bg-white text-red-600 px-4 py-2 rounded-lg hover:bg-gray-100">
+            Log in
+          </NuxtLink> -->
+          <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path :class="{ 'hidden': mobileMenu, 'block': !mobileMenu }" stroke-linecap="round"
+                stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              <path :class="{ 'block': mobileMenu, 'hidden': !mobileMenu }" stroke-linecap="round"
+                stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
 
-    <section class="relative bg-cover bg-center py-44 text-white"
-      style="background-image: url('https://img.freepik.com/free-photo/esports-championship-background-3d-illustration_1419-2785.jpg?t=st=1736685375~exp=1736688975~hmac=39af46a08f48fd2fb1db17eaacfd1706ed2c3079683eeb82d61c061a89205196&w=1380');">
+    <!-- Hero Section dengan Slider -->
+    <section id="home" class="relative h-screen overflow-hidden">
+      <div class="absolute inset-0 w-full h-full animate-slide bg-cover bg-center"
+        :style="{ backgroundImage: `url(${images[currentImage]})` }">
+      </div>
+      <div class="relative z-10 flex flex-col items-center justify-center text-center h-full text-white px-4">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Esport Merdeka</h1>
+        <p class="mb-6 text-lg md:text-xl">Bersaing dan menangkan hadiah menarik!</p>
+      </div>
+      <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    </section>
+
+    <!-- Game Section -->
+    <section id="game" class="bg-red-50 py-10">
       <div class="container mx-auto lg:px-[15%] px-4">
-        <h1 class="text-4xl font-bold mb-4">
-          Buat Turnamen E-Sport Milikmu Sendiri
-        </h1>
-        <p class="text-gray-200 mb-6">
-          Kelola kompetisimu dengan solusi online yang gratis
-        </p>
-        <div class="flex justify-center md:justify-start space-x-4">
-          <button class="bg-white text-red-600 px-6 py-3 rounded-lg hover:bg-gray-100">
-            Create Tournament
-          </button>
-          <button class="bg-red-700 text-white px-6 py-3 rounded-lg hover:bg-red-800">
-            Bracket Generator
-          </button>
+        <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Kumpulan Game</h2>
+        <div class="flex overflow-x-auto space-x-6 justify-center">
+          <div v-for="(game, index) in items.game" :key="index" class="flex-shrink-0 w-36">
+            <img :src="game.link_image" :alt="game.name" class="rounded-lg bg-cover object-cover h-[150px] w-[150px]" />
+            
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Carousel Game -->
-    <section class="bg-red-50 py-10">
+    <!-- Event Section -->
+    <section id="event" class="bg-white py-10">
       <div class="container mx-auto lg:px-[15%] px-4">
-        <h2 class="text-2xl font-bold mb-4 text-red-600">Turnamen Game</h2>
-        <div class="flex overflow-x-auto space-x-6">
-          <div class="flex-shrink-0 w-36">
-            <img src="https://i.pinimg.com/736x/b0/19/cc/b019cc1879859c1bb4defa46a1207c1e.jpg" alt="AOV"
-              class="rounded-lg" />
-          </div>
-          <div class="flex-shrink-0 w-36">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTebcyrBnbm-6Qz9jy2no4LY0EFB0HNjyXG5g&s"
-              alt="FIFA" class="rounded-lg" />
-          </div>
-          <!-- <div class="flex-shrink-0 w-36">
-              <img
-                src="https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.-JUCm0hJ_t1yzvbV0YOoBgHaEK%26pid%3DApi&sp=1736684109T818a38a7bd7b7afbf93dd2956562e79da9f2a045f8406580f1a1053a1af7474b"
-                alt="PES" class="rounded-lg" />
-            </div>
-            <div class="flex-shrink-0 w-36">
-              <img
-                src="https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.ae5q13dKCIPdW3Du_iByKAHaEK%26pid%3DApi&sp=1736684233T7ff6f68bf3506d12ba01be10b4dc4471489194a3a15fd4c6261566b538419da1"
-                alt="Fortnite" class="rounded-lg" />
-            </div>
-            <div class="flex-shrink-0 w-36">
-              <img
-                src="https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fwallpapercave.com%2Fwp%2Fwp5195928.jpg&sp=1736684349T7516c8927dee5e738cf2bf294e9c4703c618ddc353c09bebb192240d10033262"
-                alt="Free Fire" class="rounded-lg" />
-            </div> -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Turnamen Trending -->
-    <section class="bg-white py-10">
-      <div class="container mx-auto lg:px-[15%] px-4">
-        <h2 class="text-2xl font-bold mb-6 text-red-600">Turnamen Trending</h2>
+        <h2 class="text-2xl font-bold mb-6 text-red-600">Event Terbaru</h2>
         <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div class="bg-red-100 p-4 rounded-lg">
-            <img src="" alt="Mobile Legends" class="rounded-lg mb-4" />
-            <h3 class="text-lg font-bold text-red-600">HFG Januari MLBB 06</h3>
-            <p class="text-gray-500">31 Jan 2025</p>
-          </div>
-          <div class="bg-red-100 p-4 rounded-lg">
-            <img src="" alt="Mobile Legends" class="rounded-lg mb-4" />
-            <h3 class="text-lg font-bold text-red-600">HFG Januari MLBB 05</h3>
-            <p class="text-gray-500">31 Jan 2025</p>
-          </div>
-          <div class="bg-red-100 p-4 rounded-lg">
-            <img src="" alt="Mobile Legends" class="rounded-lg mb-4" />
-            <h3 class="text-lg font-bold text-red-600">HFG Januari MLBB 04</h3>
-            <p class="text-gray-500">31 Jan 2025</p>
-          </div>
-          <div class="bg-red-100 p-4 rounded-lg">
-            <img src="" alt="Mobile Legends" class="rounded-lg mb-4" />
-            <h3 class="text-lg font-bold text-red-600">HFG Januari MLBB 03</h3>
-            <p class="text-gray-500">31 Jan 2025</p>
+          <div v-for="(event, index) in eventList" :key="index" class="bg-red-100 p-4 rounded-lg">
+            <img :src="event.image" :alt="event.title" class="rounded-lg mb-4" />
+            <h3 class="text-lg font-bold text-red-600">{{ event.title }}</h3>
+            <p class="text-gray-500">{{ event.date }}</p>
           </div>
         </div>
       </div>
     </section>
-    <Footer />
+
+    <!-- Tournament Section -->
+    <section id="tournament" class="bg-gray-100 py-10">
+      <div class="container mx-auto lg:px-[15%] px-4 text-center">
+        <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnamen Sekarang</h2>
+        <p class="mb-6 text-gray-700">Bersaing dan menangkan hadiah menarik!</p>
+        <NuxtLink to="/auth/login" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+          Daftar Sekarang
+        </NuxtLink>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-red-600 py-10">
+      <div class="container mx-auto lg:px-[15%] px-4 text-center">
+        <div class="flex justify-center space-x-4 mb-4">
+          <a href="#home" class="text-white hover:text-gray-200">Home</a>
+          <a href="#game" class="text-white hover:text-gray-200">Game</a>
+          <a href="#event" class="text-white hover:text-gray-200">Event</a>
+        </div>
+        <p class="text-white">© 2025 Dunia Games. All rights reserved.</p>
+      </div>
+    </footer>
   </div>
 </template>
 
-<script>
-import Footer from '~/components/layout/landing/Footer.vue';
-import Header from '~/components/layout/landing/Header.vue';
+<style scoped>
+html {
+  scroll-behavior: smooth;
+}
 
-export default {
-  components: {
-    Header,
-    Footer
-  },
-};
-definePageMeta({
-  // middleware: 'auth',
-  layout: "blank",
-});
-</script>
-
-<style scoped></style>
+.animate-slide {
+  transition: background-image 1s ease-in-out;
+}
+</style>
