@@ -37,7 +37,11 @@ export const useTournamentService = () => {
 
   const addTournament = async (tournamentData: any) => {
     try {
-      const response = await $axios.post("/tournaments", tournamentData);
+      const response = await $axios.post("/tournaments", tournamentData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error adding event:", error);
@@ -47,7 +51,11 @@ export const useTournamentService = () => {
 
   const updateTournament = async (id: number, tournamentData: any) => {
     try {
-      const response = await $axios.put(`/tournaments/${id}`, tournamentData);
+      const response = await $axios.post(`/tournaments/${id}`, tournamentData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+      });
       return response.data;
     } catch (error) {
       console.error("Error updating event:", error);
