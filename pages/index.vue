@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useGameService } from '~/services/gameService';
+import { useTournamentRegistrationService } from '~/services/tournamentRegistrationService';
 
 definePageMeta({
   layout: "blank",
@@ -18,6 +19,7 @@ const items = ref({
   tournament: []
 });
 const { fetchGames } = useGameService();
+const { fetchTournaments } = useTournamentRegistrationService();
 
 const eventList = [
   { title: "HFG Januari MLBB 06", date: "31 Jan 2025", image: "" },
@@ -26,9 +28,11 @@ const eventList = [
   { title: "HFG Januari MLBB 03", date: "31 Jan 2025", image: "" }
 ]
 
-console.log("gammmmmm", items)
+console.log("items", items.value)
 onMounted(async () => {
   items.value.game = await fetchGames();
+  items.value.tournament = await fetchTournaments();
+
   setInterval(() => {
     currentImage.value = (currentImage.value + 1) % images.length
   }, 5000)
@@ -92,16 +96,16 @@ onMounted(async () => {
       </div>
     </section>
 
-    <!-- Event Section -->
-    <section id="event" class="bg-white py-10">
+    <!-- Tournament Section -->
+    <section id="tournament" class="bg-white py-10">
       <div class="container mx-auto lg:px-[15%] px-4">
-        <h2 class="text-2xl font-bold mb-6 text-red-600">Event Terbaru</h2>
+        <h2 class="text-2xl font-bold mb-6 text-red-600 text-center">Informasi Registrasi Tournament</h2>
         <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div v-for="(event, index) in eventList" :key="index" class="bg-red-100 p-4 rounded-lg">
-            <img :src="event.image" :alt="event.title" class="rounded-lg mb-4" />
-            <h3 class="text-lg font-bold text-red-600">{{ event.title }}</h3>
-            <p class="text-gray-500">{{ event.date }}</p>
-          </div>
+          <a v-for="(item, index) in items.tournament" :key="index" class="bg-red-100 p-4 rounded-lg" href="/auth/login">
+            <h3 class="text-lg font-bold text-red-600">{{ item.name }}</h3>
+            <p class="text-gray-500">{{ item.game }}</p>
+            <p class="text-gray-700">{{ item.price ? `Rp ${item.price}` : 'Gratis' }}</p>
+          </a>
         </div>
       </div>
     </section>
@@ -123,7 +127,7 @@ onMounted(async () => {
         <div class="flex justify-center space-x-4 mb-4">
           <a href="#home" class="text-white hover:text-gray-200">Home</a>
           <a href="#game" class="text-white hover:text-gray-200">Game</a>
-          <a href="#event" class="text-white hover:text-gray-200">Event</a>
+          <a href="#tournament" class="text-white hover:text-gray-200">Event</a>
         </div>
         <p class="text-white">© 2025 Dunia Games. All rights reserved.</p>
       </div>
