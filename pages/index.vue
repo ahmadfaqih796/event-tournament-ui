@@ -50,7 +50,6 @@ onMounted(async () => {
           <nav :class="['md:flex', mobileMenu ? 'flex' : 'hidden', 'flex-col md:flex-row md:space-x-6']">
             <a href="#home" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
             <a href="#game" class="text-white hover:text-gray-200 py-2 md:py-0">Game</a>
-            <a href="#event" class="text-white hover:text-gray-200 py-2 md:py-0">Event</a>
             <a href="#tournament" class="text-white hover:text-gray-200 py-2 md:py-0">Tournament</a>
           </nav>
         </div>
@@ -113,7 +112,7 @@ onMounted(async () => {
     <!-- Tournament Section -->
     <section id="tournament" class="bg-gray-100 py-10">
       <div class="container mx-auto lg:px-[15%] px-4 text-center">
-        <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnamen Sekarang</h2>
+        <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnament Sekarang</h2>
         <p class="mb-6 text-gray-700">Bersaing dan menangkan hadiah menarik!</p>
         <NuxtLink to="/auth/login" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
           Daftar Sekarang
@@ -127,9 +126,9 @@ onMounted(async () => {
         <div class="flex justify-center space-x-4 mb-4">
           <a href="#home" class="text-white hover:text-gray-200">Home</a>
           <a href="#game" class="text-white hover:text-gray-200">Game</a>
-          <a href="#tournament" class="text-white hover:text-gray-200">Event</a>
+          <a href="#tournament" class="text-white hover:text-gray-200">Tournament</a>
         </div>
-        <p class="text-white">© 2025 Dunia Games. All rights reserved.</p>
+        <p class="text-white">© 2025 Esport Merdeka. All rights reserved.</p>
       </div>
     </footer>
   </div>

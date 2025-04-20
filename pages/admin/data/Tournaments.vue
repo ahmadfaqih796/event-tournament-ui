@@ -134,7 +134,7 @@ watch(items, (newItems) => {
               </div>`
           },
           {
-            title: 'Bukti', field: 'bukti', sortable: true,
+            title: 'Barcode', field: 'barcode', sortable: true,
             formatter: (rowData: any) => {
               return rowData.barcode
                 ? `<div>
@@ -142,7 +142,7 @@ watch(items, (newItems) => {
                         <img src='http://127.0.0.1:8000/storage/${rowData.barcode}' style='width: 100px; height: 100px; object-fit: cover;'' />
                         </a>
             </div>`
-                : '';
+                : '-';
             }
           },
           {
