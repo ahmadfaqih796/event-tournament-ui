@@ -7,12 +7,17 @@ import { useUserService } from "~/services/userService";
 import { useSnackbar } from "~/composables/useSnackbar";
 import { getErrorMessage } from "~/utils/responseMessage";
 
+const STATUS_ACTIVE = [
+   { label: 'Active', value: 1 },
+   { label: 'Inactive', value: 0 },
+]
+
 const { fetchUsers, addUser, updateUser, deleteUser } = useUserService();
 const { showSnackbar } = useSnackbar();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
-const form = ref({ id: null, name: "", username: "", password: "", role: "peserta" });
+const form = ref({ id: null, name: "", username: "", is_active: 1, role: "peserta" });
 const items = ref([]);
 const modalType = ref<"add" | "edit" | "delete" | null>(null);
 const reactiveItems = computed(() => items.value);
@@ -20,7 +25,7 @@ const reactiveItems = computed(() => items.value);
 const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
   if (type === "add") {
-    form.value = { id: null, name: "", username: "", password: "", role: "peserta" };
+    form.value = { id: null, name: "", username: "", is_active: 1, role: "peserta" };
   } else if (rowData) {
     form.value = { ...rowData };
   }
@@ -69,6 +74,12 @@ watch(items, (newItems) => {
             { title: 'No', field: 'no', sortable: true, width: 80},
             { title: 'Name', field: 'name', sortable: true },
             { title: 'Role', field: 'role', sortable: true },
+            { title: 'Status', field: 'is_active', sortable: true,
+              formatter: (rowData: any) => `
+                <div>
+                  <p class='font-weight-bold text-${rowData.is_active ? 'success' : 'error'} text-center'>${rowData.is_active ? 'Active' : 'Inactive'}</p>
+                </div>`
+             },
             { title: 'Actions', field: 'actions', width: 150, 
               actions: (rowData: any) => [
                 { label: 'Edit', color: 'primary', icon: 'mdi-pencil', onClick: () => openModal('edit', rowData) },
@@ -77,7 +88,6 @@ watch(items, (newItems) => {
             }
           ]"
           :items="reactiveItems"
-          :extraButtons="[{ label: 'Add', color: 'primary', icon: 'mdi-plus', onClick: () => openModal('add') }]"
         />
       </UiParentCard>
     </v-col>
@@ -86,9 +96,9 @@ watch(items, (newItems) => {
   <BaseModal v-model="isModalOpen" :loading="isLoading" :title="modalType === 'add' ? 'Tambah Data' : modalType === 'edit' ? 'Edit Data' : 'Hapus Data'" @confirm="confirmAction">
     <template v-if="modalType !== 'delete'">
       <v-text-field v-model="form.name" label="Name"></v-text-field>
-      <v-text-field v-model="form.username" label="Username"></v-text-field>
-      <v-text-field v-model="form.password" label="Password"></v-text-field>
       <v-select v-model="form.role" :items="['peserta', 'komunitas']" label="Role"></v-select>
+      <v-select v-model="form.is_active" :items="STATUS_ACTIVE" item-title="label" item-value="value"
+      label="Status"></v-select>
     </template>
     <template v-else>
       <p>Apakah Anda yakin ingin menghapus data ini?</p>

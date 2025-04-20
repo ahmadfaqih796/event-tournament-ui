@@ -10,6 +10,7 @@
   "dependencies": {
     "@mdi/font": "^6.5.95",
     "@nuxt/vite-builder": "^3.7.4",
+    "@nuxtjs/tailwindcss": "^6.13.2",
     "@vueuse/core": "^12.7.0",
     "apexcharts": "3.36.3",
     "axios": "^1.7.9",

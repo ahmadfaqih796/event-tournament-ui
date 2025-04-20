@@ -19,6 +19,22 @@ export const useTournamentService = () => {
     }
   };
 
+  const fetchOpenTournaments = async () => {
+    try {
+      const response = await $axios.get("/open-tournaments");
+      const dataMap = response.data.map((item: any, index: number) => {
+        return {
+          ...item,
+          no: index + 1,
+        };
+      });
+      return dataMap;
+    } catch (error) {
+      console.error("Error fetching tournaments:", error);
+      return [];
+    }
+  };
+
   const addTournament = async (tournamentData: any) => {
     try {
       const response = await $axios.post("/tournaments", tournamentData);
@@ -48,5 +64,11 @@ export const useTournamentService = () => {
     }
   };
 
-  return { fetchTournaments, addTournament, updateTournament, deleteTournament };
+  return {
+    fetchTournaments,
+    fetchOpenTournaments,
+    addTournament,
+    updateTournament,
+    deleteTournament,
+  };
 };

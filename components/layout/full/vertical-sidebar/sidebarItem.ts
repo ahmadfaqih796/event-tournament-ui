@@ -33,7 +33,7 @@ const sidebarItem: menu[] = [
     title: "User",
     icon: UserPlusIcon,
     to: "/admin/managements/users",
-    access: ["admin", "komunitas"],
+    access: ["admin"],
   },
   {
     title: "Games",
@@ -47,11 +47,17 @@ const sidebarItem: menu[] = [
     to: "/admin/managements/events",
     access: ["admin", "komunitas"],
   },
+  // {
+  //   title: "Account Games",
+  //   icon: UserPlusIcon,
+  //   to: "/admin/managements/accountgames",
+  //   access: ["peserta", 'admin'],
+  // },
   {
-    title: "Account Games",
+    title: "Teams",
     icon: UserPlusIcon,
-    to: "/admin/managements/accountgames",
-    access: ["peserta", 'admin'],
+    to: "/admin/managements/teams",
+    access: ["admin", "peserta"],
   },
   {
     header: "Data",
@@ -64,16 +70,26 @@ const sidebarItem: menu[] = [
     access: ["admin", "komunitas"],
   },
   {
-    title: "Team",
+    title: "Berita",
     icon: UserPlusIcon,
-    to: "/admin/data/teams",
+    to: "/admin/data/berita",
     access: ["admin", "komunitas"],
+  },
+  {
+    header: "Information",
+    access: ["peserta", "komunitas"],
+  },
+  {
+    title: "Tournament",
+    icon: UserPlusIcon,
+    to: "/admin/info/tournaments",
+    access: ["peserta"],
   },
   {
     title: "Transaksi",
     icon: UserPlusIcon,
-    to: "/admin/data/transaksi",
-    access: ["admin", "komunitas"],
+    to: "/admin/info/transactions",
+    access: ["peserta", "komunitas"],
   },
   {
     header: "Setting",

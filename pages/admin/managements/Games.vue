@@ -12,7 +12,7 @@ const { showSnackbar } = useSnackbar();
 
 const isModalOpen = ref(false);
 const isLoading = ref(false);
-const form = ref({ id: null, name: "" });
+const form = ref({ id: null, name: "", link_image : "" });
 const items = ref([]);
 const modalType = ref<"add" | "edit" | "delete" | null>(null);
 const reactiveItems = computed(() => items.value);
@@ -20,7 +20,7 @@ const reactiveItems = computed(() => items.value);
 const openModal = (type: "add" | "edit" | "delete", rowData?: any) => {
   modalType.value = type;
   if (type === "add") {
-    form.value = { id: null, name: "" };
+    form.value = { id: null, name: "", link_image : "" };
   } else if (rowData) {
     form.value = { ...rowData };
   }
@@ -85,6 +85,7 @@ watch(items, (newItems) => {
     @confirm="confirmAction">
     <template v-if="modalType !== 'delete'">
       <v-text-field v-model="form.name" label="Name"></v-text-field>
+      <v-text-field v-model="form.link_image" label="Link Gambar"></v-text-field>
     </template>
     <template v-else>
       <p>Apakah Anda yakin ingin menghapus data ini?</p>
