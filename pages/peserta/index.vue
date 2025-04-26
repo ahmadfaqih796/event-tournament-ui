@@ -95,7 +95,7 @@ onMounted(async () => {
       <div class="container mx-auto lg:px-[15%] px-4">
         <h2 class="text-2xl font-bold mb-6 text-red-600 text-center">Informasi Registrasi Tournament</h2>
         <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <a v-for="(item, index) in items.tournament" :key="index" class="bg-red-100 p-4 rounded-lg" href="/auth/login">
+          <a v-for="(item, index) in items.tournament" :key="index" class="bg-red-100 p-4 rounded-lg" :href="`/peserta/tournament/${item.id}`">
             <h3 class="text-lg font-bold text-red-600">{{ item.name }}</h3>
             <p class="text-gray-500">{{ item.game }}</p>
             <p class="text-gray-700">{{ item.price ? `Rp ${item.price}` : 'Gratis' }}</p>
