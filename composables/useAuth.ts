@@ -18,7 +18,7 @@ export const useAuth = () => {
       const response = await $axios.post("/login", { username, password });
       token.value = response.data.token;
       await getSession(response.data.token);
-      return true;
+      return response.data;
     } catch (err) {
       error.value = "Login gagal!";
       return false;

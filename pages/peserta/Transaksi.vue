@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue';
 import { useGameService } from '~/services/gameService';
 import { useTournamentRegistrationService } from '~/services/tournamentRegistrationService';
-import { useAuth } from '@/composables/useAuth';
 
 definePageMeta({
   layout: "blank",
@@ -19,11 +18,15 @@ const items = ref({
   game : [],
   tournament: []
 });
-const { user } = useAuth();
 const { fetchGames } = useGameService();
 const { fetchTournaments } = useTournamentRegistrationService();
 
-const userData = computed(() => JSON.parse(user.value) || "");
+const eventList = [
+  { title: "HFG Januari MLBB 06", date: "31 Jan 2025", image: "" },
+  { title: "HFG Januari MLBB 05", date: "31 Jan 2025", image: "" },
+  { title: "HFG Januari MLBB 04", date: "31 Jan 2025", image: "" },
+  { title: "HFG Januari MLBB 03", date: "31 Jan 2025", image: "" }
+]
 
 console.log("items", items.value)
 onMounted(async () => {
@@ -48,13 +51,12 @@ onMounted(async () => {
             <a href="#home" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
             <a href="#game" class="text-white hover:text-gray-200 py-2 md:py-0">Game</a>
             <a href="#tournament" class="text-white hover:text-gray-200 py-2 md:py-0">Tournament</a>
-            <a href="/Transaksi" class="text-white hover:text-gray-200 py-2 md:py-0">Transaksi</a>
           </nav>
         </div>
         <div class="flex items-center space-x-4">
-          <NuxtLink v-if="!userData" to="/auth/login" class="bg-white text-red-600 px-4 py-2 rounded-lg hover:bg-gray-100">
+          <!-- <NuxtLink to="/auth/login" class="bg-white text-red-600 px-4 py-2 rounded-lg hover:bg-gray-100">
             Log in
-          </NuxtLink>
+          </NuxtLink> -->
           <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">

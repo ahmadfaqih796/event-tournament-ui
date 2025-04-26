@@ -8,8 +8,13 @@ const formState = reactive({
 });
 const router = useRouter();
 const onSubmit = async () => {
-    const success = await doLogin(formState.username, formState.password);
-    if (success) {
+    const res = await doLogin(formState.username, formState.password);
+    console.log("masukkkk", res)
+    if (res.user.role == "peserta") {
+        navigateTo('/peserta/transaksi');
+    } else if (res.user.role == "peserta") {
+        navigateTo('/komunitas/dashboard');
+    } else {
         navigateTo('/admin/dashboard');
     }
 };
