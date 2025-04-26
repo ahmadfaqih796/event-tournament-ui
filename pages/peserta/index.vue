@@ -3,7 +3,6 @@ import { onMounted, ref } from 'vue';
 import { useGameService } from '~/services/gameService';
 import { useTournamentRegistrationService } from '~/services/tournamentRegistrationService';
 import { useAuth } from '@/composables/useAuth';
-import { useTransactionService } from '~/services/transactionService';
 
 definePageMeta({
   layout: "blank",
@@ -18,13 +17,11 @@ const images = [
 const currentImage = ref(0)
 const mobileMenu = ref(false)
 const items = ref({
-  game: [],
-  tournament: [],
-  transaction: []
+  game : [],
+  tournament: []
 });
 const { fetchGames } = useGameService();
 const { fetchTournaments } = useTournamentRegistrationService();
-const { fetchTransactions } = useTransactionService();
 
 const { user } = useAuth();
 const userData = computed(() => JSON.parse(user.value) || "");
@@ -33,7 +30,6 @@ console.log("items", items.value)
 onMounted(async () => {
   items.value.game = await fetchGames();
   items.value.tournament = await fetchTournaments();
-  items.value.transaction = await fetchTransactions();
 
   setInterval(() => {
     currentImage.value = (currentImage.value + 1) % images.length
@@ -75,7 +71,8 @@ onMounted(async () => {
         :style="{ backgroundImage: `url(${images[currentImage]})` }">
       </div>
       <div class="relative z-10 flex flex-col items-center justify-center text-center h-full text-white px-4">
-        <h1 class="text-4xl md:text-6xl font-bold mb-4">Transaksi</h1>
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Esport Merdeka</h1>
+        <p class="mb-6 text-lg md:text-xl">Bersaing dan menangkan hadiah menarik!</p>
       </div>
       <div class="absolute inset-0 bg-black bg-opacity-50"></div>
     </section>
@@ -83,64 +80,38 @@ onMounted(async () => {
     <!-- Game Section -->
     <section id="game" class="bg-red-50 py-10">
       <div class="container mx-auto lg:px-[15%] px-4">
-        <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Data Transaksi</h2>
+        <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Kumpulan Game</h2>
+        <div class="flex overflow-x-auto space-x-6 justify-center">
+          <div v-for="(game, index) in items.game" :key="index" class="flex-shrink-0 w-36">
+            <img :src="game.link_image" :alt="game.name" class="rounded-lg bg-cover object-cover h-[150px] w-[150px]" />
+            
+          </div>
+        </div>
+      </div>
+    </section>
 
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                No
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Tournament
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Game
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Harga
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Bukti
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="(item, index) in items.transaction" :key="index">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ index + 1 }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ item.tournament_name }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ item.game_name }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">Rp {{ item.price }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ item.transaction.payment_status }}</div>
-              </td>
-              <div>
-                <a :href="`http://127.0.0.1:8000/storage/${item.transaction.payment_proof}`" target="_blank">
-                  <img :src="`http://127.0.0.1:8000/storage/${item.transaction.payment_proof}`"
-                    style="width: 100px; height: 100px; object-fit: cover;" />
-                </a>
-              </div>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Tournament Section -->
+    <section id="tournament" class="bg-white py-10">
+      <div class="container mx-auto lg:px-[15%] px-4">
+        <h2 class="text-2xl font-bold mb-6 text-red-600 text-center">Informasi Registrasi Tournament</h2>
+        <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <a v-for="(item, index) in items.tournament" :key="index" class="bg-red-100 p-4 rounded-lg" href="/auth/login">
+            <h3 class="text-lg font-bold text-red-600">{{ item.name }}</h3>
+            <p class="text-gray-500">{{ item.game }}</p>
+            <p class="text-gray-700">{{ item.price ? `Rp ${item.price}` : 'Gratis' }}</p>
+          </a>
+        </div>
+      </div>
+    </section>
 
+    <!-- Tournament Section -->
+    <section id="tournament" class="bg-gray-100 py-10">
+      <div class="container mx-auto lg:px-[15%] px-4 text-center">
+        <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnament Sekarang</h2>
+        <p class="mb-6 text-gray-700">Bersaing dan menangkan hadiah menarik!</p>
+        <NuxtLink to="/auth/login" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
+          Daftar Sekarang
+        </NuxtLink>
       </div>
     </section>
 
