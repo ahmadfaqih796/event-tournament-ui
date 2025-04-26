@@ -52,6 +52,7 @@ onMounted(async () => {
           <nav :class="['md:flex', mobileMenu ? 'flex' : 'hidden', 'flex-col md:flex-row md:space-x-6']">
             <a href="/peserta" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
             <a href="/peserta/Transaksi" class="text-white hover:text-gray-200 py-2 md:py-0">Transaksi</a>
+            <a href="/peserta/Team" class="text-white hover:text-gray-200 py-2 md:py-0">Team</a>
           </nav>
         </div>
         <div class="flex items-center space-x-4">

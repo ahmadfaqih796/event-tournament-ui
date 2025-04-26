@@ -49,14 +49,14 @@ watch(paginatedItems, (newPaginatedItems) => {
           </v-sheet>
         </v-col>
         <v-col>
-          <v-sheet class="d-flex justify-end gap-3">
+          <div class="d-flex justify-end gap-3 bg-transparent">
             <template v-if="extraButtons">
               <v-btn v-for="button in extraButtons" :key="button.label" :color="button.color" @click="button.onClick">
                 <v-icon left>{{ button.icon }}</v-icon>
                 {{ button.label }}
               </v-btn>
             </template>
-          </v-sheet>
+          </div>
         </v-col>
       </v-row>
     </v-container>
