@@ -12,7 +12,7 @@ const mobileMenu = ref(false)
    <header class="fixed top-0 left-0 w-full bg-red-600 z-50">
       <div
          :class="['block md:hidden absolute top-16 p-3 left-0 w-full bg-red-600 z-50', mobileMenu ? 'block' : 'hidden']">
-         <MenuNavbar />
+         <MenuNavbar :role="userData.role" />
       </div>
       <div class="container mx-auto flex justify-between items-center py-4 px-4 lg:px-[15%]">
          <div class="flex items-center">
@@ -20,7 +20,7 @@ const mobileMenu = ref(false)
                src="https://e7.pngegg.com/pngimages/976/842/png-clipart-esport-logo-logo-esport-logo-leave-the-material-thumbnail.png"
                alt="Logo" class="h-8 mr-4" />
             <nav :class="['hidden md:flex', 'flex-col md:flex-row md:space-x-6']">
-               <MenuNavbar />
+               <MenuNavbar :role="userData.role" />
             </nav>
          </div>
          <div class="flex items-center space-x-4">

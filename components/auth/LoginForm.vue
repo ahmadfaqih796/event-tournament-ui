@@ -12,8 +12,8 @@ const onSubmit = async () => {
     console.log("masukkkk", res)
     if (res.user.role == "peserta") {
         navigateTo('/peserta/transaksi');
-    } else if (res.user.role == "peserta") {
-        navigateTo('/komunitas/dashboard');
+    } else if (res.user.role == "komunitas") {
+        navigateTo('/komunitas');
     } else {
         navigateTo('/admin/dashboard');
     }

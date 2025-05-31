@@ -1,7 +1,14 @@
 <script setup>
 import { NuxtLink } from "#components";
+ 
+const { role } = defineProps({
+  role: {
+    type: String,
+    required: false,
+  },
+});
 
-const navList = [
+const navPesertaList = [
   {
     name: "Home",
     url: "/peserta",
@@ -15,6 +22,20 @@ const navList = [
     url: "/peserta/Team",
   },
 ];
+
+const navKomunitasList = [
+  {
+    name: "Home",
+    url: "/komunitas",
+  },
+  {
+    name: "Tournament",
+    url: "/komunitas/Tournament",
+  },
+]
+
+const navList = role === "peserta" ? navPesertaList : navKomunitasList
+
 </script>
 
 <template>
