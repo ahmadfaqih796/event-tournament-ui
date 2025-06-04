@@ -19,6 +19,7 @@ const items = ref({
   game : [],
   tournament: []
 });
+console.log("itemmmm", items.value)
 const { user } = useAuth();
 const { fetchGames } = useGameService();
 const { fetchTournaments } = useTournamentRegistrationService();
@@ -48,7 +49,7 @@ onMounted(async () => {
             <a href="#home" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
             <a href="#game" class="text-white hover:text-gray-200 py-2 md:py-0">Game</a>
             <a href="#tournament" class="text-white hover:text-gray-200 py-2 md:py-0">Tournament</a>
-            <a href="/Transaksi" class="text-white hover:text-gray-200 py-2 md:py-0">Transaksi</a>
+            <a href="/Berita" class="text-white hover:text-gray-200 py-2 md:py-0">Berita</a>
           </nav>
         </div>
         <div class="flex items-center space-x-4">
@@ -108,7 +109,7 @@ onMounted(async () => {
     </section>
 
     <!-- Tournament Section -->
-    <section id="tournament" class="bg-gray-100 py-10">
+    <!-- <section id="tournament" class="bg-gray-100 py-10">
       <div class="container mx-auto lg:px-[15%] px-4 text-center">
         <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnament Sekarang</h2>
         <p class="mb-6 text-gray-700">Bersaing dan menangkan hadiah menarik!</p>
@@ -116,7 +117,7 @@ onMounted(async () => {
           Daftar Sekarang
         </NuxtLink>
       </div>
-    </section>
+    </section> -->
 
     <!-- Footer -->
     <footer class="bg-red-600 py-10">

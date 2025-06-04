@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
+import { useTeamService } from '~/services/teamService';
+import { useTournamentRegistrationService } from '~/services/tournamentRegistrationService';
 import { useTournamentService } from '~/services/tournamentService';
 
 definePageMeta({
    layout: "blank",
    middleware: 'auth',
 });
+
+const isLoading = ref(false);
+
+const { showSnackbar } = useSnackbar();
 
 const images = [
    "https://img.freepik.com/free-photo/esports-championship-background-3d-illustration_1419-2785.jpg",
@@ -14,6 +20,7 @@ const images = [
 ]
 
 const currentImage = ref(0)
+
 const mobileMenu = ref(false)
 const items = ref({
    tournament_detail: {
@@ -28,24 +35,54 @@ const items = ref({
       event: {
          name: ''
       }
-   }
+   },
+   teams: []
 });
 
 const route = useRoute()
 const tournamentId = route.params.id as string
 
 const { fetchTournamentById } = useTournamentService();
+const { addTransaction } = useTournamentRegistrationService();
+const { fetchTeams } = useTeamService();
+
 
 const { user } = useAuth();
 const userData = computed(() => JSON.parse(user.value) || "");
+const form = ref({ team_id: "", payment_proof: "" });
 
 onMounted(async () => {
    items.value.tournament_detail = await fetchTournamentById(tournamentId);
+   items.value.teams = await fetchTeams();
 
    setInterval(() => {
       currentImage.value = (currentImage.value + 1) % images.length
    }, 5000)
 });
+
+const confirmAction = async () => {
+   isLoading.value = true;
+   const payload = {
+      ...form.value,
+      tournament_id: tournamentId,
+      payment_status: "pending"
+   }
+   console.log("masuk", payload)
+   try {
+      const formData = new FormData();
+      formData.append("tournament_id", payload.tournament_id);
+      formData.append("team_id", payload.team_id);
+      formData.append("payment_status", payload.payment_status);
+      formData.append("payment_proof", payload.payment_proof[0]);
+      await addTransaction(formData);
+      showSnackbar({ message: "Tournament berhasil ditambahkan!", color: "success" });
+   } catch (error) {
+      showSnackbar({ message: getErrorMessage(error), color: "error" });
+   } finally {
+      isLoading.value = false;
+   }
+
+}
 </script>
 
 <template>
@@ -129,8 +166,18 @@ onMounted(async () => {
             </article>
          </div>
 
-         <div class="col-span-1">
-            {{ items.tournament_detail }}
+         <div class="col-span-1 ">
+            <div class="bg-slate-50 rounded-lg p-6 ">
+               <!-- {{ items.tournament_detail }} -->
+               <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Daftar</h2>
+               <v-autocomplete v-model="form.team_id" :items="items.teams" item-title="name" item-value="id"
+                  label="Team" clearable></v-autocomplete>
+               <v-file-input v-model="form.payment_proof" label="File input"></v-file-input>
+               <button @click="confirmAction"
+                  class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                  Daftar
+               </button>
+            </div>
          </div>
       </section>
 

@@ -4,6 +4,8 @@ import { useGameService } from '~/services/gameService';
 import { useTournamentRegistrationService } from '~/services/tournamentRegistrationService';
 import { useAuth } from '@/composables/useAuth';
 import { useTransactionService } from '~/services/transactionService';
+import ProfileLandingDD from '~/components/layout/landing/container/ProfileLandingDD.vue';
+import MenuNavbar from '~/components/layout/landing/container/MenuNavbar.vue';
 
 definePageMeta({
   layout: "blank",
@@ -15,6 +17,7 @@ const images = [
   "https://wallpapercave.com/wp/wp5195928.jpg",
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTebcyrBnbm-6Qz9jy2no4LY0EFB0HNjyXG5g&s"
 ]
+
 const currentImage = ref(0)
 const mobileMenu = ref(false)
 const items = ref({
@@ -44,19 +47,21 @@ onMounted(async () => {
 <template>
   <div>
     <header class="fixed top-0 left-0 w-full bg-red-600 z-50">
+      <div :class="['block md:hidden absolute top-16 p-3 left-0 w-full bg-red-600 z-50', mobileMenu ? 'block' : 'hidden']">
+        <MenuNavbar />
+      </div>
       <div class="container mx-auto flex justify-between items-center py-4 px-4 lg:px-[15%]">
         <div class="flex items-center">
           <img
             src="https://e7.pngegg.com/pngimages/976/842/png-clipart-esport-logo-logo-esport-logo-leave-the-material-thumbnail.png"
             alt="Logo" class="h-8 mr-4" />
-          <nav :class="['md:flex', mobileMenu ? 'flex' : 'hidden', 'flex-col md:flex-row md:space-x-6']">
-            <a href="/peserta" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
-            <a href="/peserta/Transaksi" class="text-white hover:text-gray-200 py-2 md:py-0">Transaksi</a>
-            <a href="/peserta/Team" class="text-white hover:text-gray-200 py-2 md:py-0">Team</a>
+          <nav :class="['hidden md:flex', 'flex-col md:flex-row md:space-x-6']">
+            <MenuNavbar />
           </nav>
         </div>
         <div class="flex items-center space-x-4">
           <span class="text-white">Hi, {{ userData.name }}</span>
+          <ProfileLandingDD />
           <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -86,61 +91,63 @@ onMounted(async () => {
       <div class="container mx-auto lg:px-[15%] px-4">
         <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Data Transaksi</h2>
 
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                No
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Tournament
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Game
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Harga
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th
-                class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                Bukti
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="(item, index) in items.transaction" :key="index">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ index + 1 }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ item.tournament_name }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ item.game_name }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">Rp {{ item.price }}</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900">{{ item.transaction.payment_status }}</div>
-              </td>
-              <div>
-                <a :href="`http://127.0.0.1:8000/storage/${item.transaction.payment_proof}`" target="_blank">
-                  <img :src="`http://127.0.0.1:8000/storage/${item.transaction.payment_proof}`"
-                    style="width: 100px; height: 100px; object-fit: cover;" />
-                </a>
-              </div>
-            </tr>
-          </tbody>
-        </table>
+        <div class="relative w-[90%] mx-auto overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  No
+                </th>
+                <th
+                  class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Tournament
+                </th>
+                <th
+                  class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Game
+                </th>
+                <th
+                  class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Harga
+                </th>
+                <th
+                  class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+                <th
+                  class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                  Bukti
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="(item, index) in items.transaction" :key="index">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ index + 1 }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ item.tournament_name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ item.game_name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">Rp {{ item.price }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ item.transaction.payment_status }}</div>
+                </td>
+                <div>
+                  <a :href="`http://127.0.0.1:8000/storage/${item.transaction.payment_proof}`" target="_blank">
+                    <img :src="`http://127.0.0.1:8000/storage/${item.transaction.payment_proof}`"
+                      style="width: 100px; height: 100px; object-fit: cover;" />
+                  </a>
+                </div>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </section>
