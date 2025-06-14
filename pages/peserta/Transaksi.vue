@@ -6,19 +6,13 @@ import { useAuth } from '@/composables/useAuth';
 import { useTransactionService } from '~/services/transactionService';
 import ProfileLandingDD from '~/components/layout/landing/container/ProfileLandingDD.vue';
 import MenuNavbar from '~/components/layout/landing/container/MenuNavbar.vue';
+import HeroSection from '~/components/layout/landing/container/HeroSection.vue';
 
 definePageMeta({
   layout: "blank",
   middleware: 'auth',
 });
 
-const images = [
-  "https://img.freepik.com/free-photo/esports-championship-background-3d-illustration_1419-2785.jpg",
-  "https://wallpapercave.com/wp/wp5195928.jpg",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTebcyrBnbm-6Qz9jy2no4LY0EFB0HNjyXG5g&s"
-]
-
-const currentImage = ref(0)
 const mobileMenu = ref(false)
 const items = ref({
   game: [],
@@ -32,15 +26,10 @@ const { fetchTransactions } = useTransactionService();
 const { user } = useAuth();
 const userData = computed(() => JSON.parse(user.value) || "");
 
-console.log("items", items.value)
 onMounted(async () => {
   items.value.game = await fetchGames();
   items.value.tournament = await fetchTournaments();
   items.value.transaction = await fetchTransactions();
-
-  setInterval(() => {
-    currentImage.value = (currentImage.value + 1) % images.length
-  }, 5000)
 })
 </script>
 
@@ -76,18 +65,11 @@ onMounted(async () => {
     </header>
 
     <!-- Hero Section dengan Slider -->
-    <section id="home" class="relative h-screen overflow-hidden">
-      <div class="absolute inset-0 w-full h-full animate-slide bg-cover bg-center"
-        :style="{ backgroundImage: `url(${images[currentImage]})` }">
-      </div>
-      <div class="relative z-10 flex flex-col items-center justify-center text-center h-full text-white px-4">
-        <h1 class="text-4xl md:text-6xl font-bold mb-4">Transaksi</h1>
-      </div>
-      <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <section id="home">
+      <HeroSection :title="'Transaksi'" />
     </section>
 
-    <!-- Game Section -->
-    <section id="game" class="bg-red-50 py-10">
+    <section id="table" class="bg-red-50 py-10">
       <div class="container mx-auto lg:px-[15%] px-4">
         <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Data Transaksi</h2>
 
