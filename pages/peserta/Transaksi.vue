@@ -7,6 +7,7 @@ import { useTransactionService } from '~/services/transactionService';
 import ProfileLandingDD from '~/components/layout/landing/container/ProfileLandingDD.vue';
 import MenuNavbar from '~/components/layout/landing/container/MenuNavbar.vue';
 import HeroSection from '~/components/layout/landing/container/HeroSection.vue';
+import FooterSection from '~/components/layout/landing/container/FooterSection.vue';
 
 definePageMeta({
   layout: "blank",
@@ -135,25 +136,12 @@ onMounted(async () => {
     </section>
 
     <!-- Footer -->
-    <footer class="bg-red-600 py-10">
-      <div class="container mx-auto lg:px-[15%] px-4 text-center">
-        <div class="flex justify-center space-x-4 mb-4">
-          <a href="#home" class="text-white hover:text-gray-200">Home</a>
-          <a href="#game" class="text-white hover:text-gray-200">Game</a>
-          <a href="#tournament" class="text-white hover:text-gray-200">Tournament</a>
-        </div>
-        <p class="text-white">© 2025 Esport Merdeka. All rights reserved.</p>
-      </div>
-    </footer>
+    <FooterSection />
   </div>
 </template>
 
 <style scoped>
 html {
   scroll-behavior: smooth;
-}
-
-.animate-slide {
-  transition: background-image 1s ease-in-out;
 }
 </style>
