@@ -2,13 +2,8 @@
 import MenuNavbar from './MenuNavbar.vue';
 import ProfileLandingDD from './ProfileLandingDD.vue';
 
-defineProps({
-   userData: {
-      type: Object,
-      default: {}
-   }
-})
-
+const { user } = useAuth();
+const userData = computed(() => JSON.parse(user.value) || "");
 const mobileMenu = ref(false)
 
 </script>

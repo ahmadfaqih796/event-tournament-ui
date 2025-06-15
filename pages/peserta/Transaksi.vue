@@ -1,5 +1,4 @@
 <script setup>
-import { useAuth } from '@/composables/useAuth';
 import { onMounted, ref } from 'vue';
 import FooterSection from '~/components/layout/landing/container/FooterSection.vue';
 import HeroSection from '~/components/layout/landing/container/HeroSection.vue';
@@ -23,9 +22,6 @@ const { fetchGames } = useGameService();
 const { fetchTournaments } = useTournamentRegistrationService();
 const { fetchTransactions } = useTransactionService();
 
-const { user } = useAuth();
-const userData = computed(() => JSON.parse(user.value) || "");
-
 onMounted(async () => {
   items.value.game = await fetchGames();
   items.value.tournament = await fetchTournaments();
@@ -36,7 +32,7 @@ onMounted(async () => {
 <template>
   <div>
     <!-- Navbar -->
-    <NavbarSection :mobileMenu="mobileMenu" :userData="userData" />
+    <NavbarSection />
 
     <!-- Hero Section dengan Slider -->
     <section id="home">
