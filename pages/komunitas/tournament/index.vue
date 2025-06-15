@@ -113,13 +113,13 @@ onMounted(async () => {
 
       <!-- Hero Section dengan Slider -->
       <section id="home">
-         <HeroSection :title="'Tornament'" />
+         <HeroSection :title="'Pendaftaran Tournament'" />
       </section>
 
       <!-- Team Section -->
-      <section id="game" class="bg-red-50 py-10">
+      <section id="game" class="bg-white py-10">
          <div class="container mx-auto lg:px-[15%] px-4">
-            <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Data Tournament</h2>
+            <h2 class="text-2xl font-bold mb-4 text-red-600 text-center">Data Pendaftaran Tournament</h2>
 
             <TablePagination :columns="[
                { title: 'No', field: 'no', sortable: true, width: 80 },

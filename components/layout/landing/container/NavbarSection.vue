@@ -9,9 +9,9 @@ const mobileMenu = ref(false)
 </script>
 
 <template>
-   <header class="fixed top-0 left-0 w-full bg-red-600 z-50">
+   <header class="fixed top-0 left-0 w-full bg-white z-50">
       <div
-         :class="['block md:hidden absolute top-16 p-3 left-0 w-full bg-red-600 z-50', mobileMenu ? 'block' : 'hidden']">
+         :class="['block md:hidden absolute top-16 p-3 left-0 w-full bg-white z-50', mobileMenu ? 'block' : 'hidden']">
          <MenuNavbar :role="userData.role" />
       </div>
       <div class="container mx-auto flex justify-between items-center py-4 px-4 lg:px-[15%]">
@@ -19,14 +19,15 @@ const mobileMenu = ref(false)
             <img
                src="https://e7.pngegg.com/pngimages/976/842/png-clipart-esport-logo-logo-esport-logo-leave-the-material-thumbnail.png"
                alt="Logo" class="h-8 mr-4" />
-            <nav :class="['hidden md:flex', 'flex-col md:flex-row md:space-x-6']">
-               <MenuNavbar :role="userData.role" />
-            </nav>
+            <h1 class="text-2xl font-bold text-red-600">Esport</h1>
          </div>
+         <nav :class="['hidden md:flex', 'flex-col md:flex-row md:space-x-6']">
+            <MenuNavbar :role="userData.role" />
+         </nav>
          <div class="flex items-center space-x-4">
-            <span class="text-white">Hi, {{ userData.name }}</span>
+            <span class="text-red-600">Hi, {{ userData.name }}</span>
             <ProfileLandingDD />
-            <button @click=" mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
+            <button @click=" mobileMenu = !mobileMenu" class="md:hidden text-red-600 focus:outline-none">
                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                   stroke="currentColor">
                   <path :class="{ 'hidden': mobileMenu, 'block': !mobileMenu }" stroke-linecap="round"
