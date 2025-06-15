@@ -1,6 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useGameService } from '~/services/gameService';
+import { useTournamentRegistrationService } from '~/services/tournamentRegistrationService';
+import { useAuth } from '@/composables/useAuth';
 
 definePageMeta({
   layout: "blank",
@@ -17,18 +19,18 @@ const items = ref({
   game : [],
   tournament: []
 });
+console.log("itemmmm", items.value)
+const { user } = useAuth();
 const { fetchGames } = useGameService();
+const { fetchTournaments } = useTournamentRegistrationService();
 
-const eventList = [
-  { title: "HFG Januari MLBB 06", date: "31 Jan 2025", image: "" },
-  { title: "HFG Januari MLBB 05", date: "31 Jan 2025", image: "" },
-  { title: "HFG Januari MLBB 04", date: "31 Jan 2025", image: "" },
-  { title: "HFG Januari MLBB 03", date: "31 Jan 2025", image: "" }
-]
+const userData = computed(() => JSON.parse(user.value) || "");
 
-console.log("gammmmmm", items)
+console.log("items", items.value)
 onMounted(async () => {
   items.value.game = await fetchGames();
+  items.value.tournament = await fetchTournaments();
+
   setInterval(() => {
     currentImage.value = (currentImage.value + 1) % images.length
   }, 5000)
@@ -46,14 +48,14 @@ onMounted(async () => {
           <nav :class="['md:flex', mobileMenu ? 'flex' : 'hidden', 'flex-col md:flex-row md:space-x-6']">
             <a href="#home" class="text-white hover:text-gray-200 py-2 md:py-0">Home</a>
             <a href="#game" class="text-white hover:text-gray-200 py-2 md:py-0">Game</a>
-            <a href="#event" class="text-white hover:text-gray-200 py-2 md:py-0">Event</a>
             <a href="#tournament" class="text-white hover:text-gray-200 py-2 md:py-0">Tournament</a>
+            <a href="/Berita" class="text-white hover:text-gray-200 py-2 md:py-0">Berita</a>
           </nav>
         </div>
         <div class="flex items-center space-x-4">
-          <!-- <NuxtLink to="/auth/login" class="bg-white text-red-600 px-4 py-2 rounded-lg hover:bg-gray-100">
+          <NuxtLink v-if="!userData" to="/auth/login" class="bg-white text-red-600 px-4 py-2 rounded-lg hover:bg-gray-100">
             Log in
-          </NuxtLink> -->
+          </NuxtLink>
           <button @click="mobileMenu = !mobileMenu" class="md:hidden text-white focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -92,30 +94,30 @@ onMounted(async () => {
       </div>
     </section>
 
-    <!-- Event Section -->
-    <section id="event" class="bg-white py-10">
+    <!-- Tournament Section -->
+    <section id="tournament" class="bg-white py-10">
       <div class="container mx-auto lg:px-[15%] px-4">
-        <h2 class="text-2xl font-bold mb-6 text-red-600">Event Terbaru</h2>
+        <h2 class="text-2xl font-bold mb-6 text-red-600 text-center">Informasi Registrasi Tournament</h2>
         <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div v-for="(event, index) in eventList" :key="index" class="bg-red-100 p-4 rounded-lg">
-            <img :src="event.image" :alt="event.title" class="rounded-lg mb-4" />
-            <h3 class="text-lg font-bold text-red-600">{{ event.title }}</h3>
-            <p class="text-gray-500">{{ event.date }}</p>
-          </div>
+          <a v-for="(item, index) in items.tournament" :key="index" class="bg-red-100 p-4 rounded-lg" href="/auth/login">
+            <h3 class="text-lg font-bold text-red-600">{{ item.name }}</h3>
+            <p class="text-gray-500">{{ item.game }}</p>
+            <p class="text-gray-700">{{ item.price ? `Rp ${item.price}` : 'Gratis' }}</p>
+          </a>
         </div>
       </div>
     </section>
 
     <!-- Tournament Section -->
-    <section id="tournament" class="bg-gray-100 py-10">
+    <!-- <section id="tournament" class="bg-gray-100 py-10">
       <div class="container mx-auto lg:px-[15%] px-4 text-center">
-        <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnamen Sekarang</h2>
+        <h2 class="text-2xl font-bold mb-4 text-red-600">Gabung Turnament Sekarang</h2>
         <p class="mb-6 text-gray-700">Bersaing dan menangkan hadiah menarik!</p>
         <NuxtLink to="/auth/login" class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700">
           Daftar Sekarang
         </NuxtLink>
       </div>
-    </section>
+    </section> -->
 
     <!-- Footer -->
     <footer class="bg-red-600 py-10">
@@ -123,9 +125,9 @@ onMounted(async () => {
         <div class="flex justify-center space-x-4 mb-4">
           <a href="#home" class="text-white hover:text-gray-200">Home</a>
           <a href="#game" class="text-white hover:text-gray-200">Game</a>
-          <a href="#event" class="text-white hover:text-gray-200">Event</a>
+          <a href="#tournament" class="text-white hover:text-gray-200">Tournament</a>
         </div>
-        <p class="text-white">© 2025 Dunia Games. All rights reserved.</p>
+        <p class="text-white">© 2025 Esport Merdeka. All rights reserved.</p>
       </div>
     </footer>
   </div>

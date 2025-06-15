@@ -109,6 +109,18 @@ watch(items, (newItems) => {
               </div>`
                },
                {
+                  title: 'Barcode', field: 'barcode', sortable: true,
+                  formatter: (rowData: any) => {
+                     return rowData.barcode
+                        ? `<div>
+                              <a href='http://127.0.0.1:8000/storage/${rowData.barcode}' target='_blank'>
+                              <img src='http://127.0.0.1:8000/storage/${rowData.barcode}' style='width: 100px; height: 100px; object-fit: cover;'' />
+                              </a>
+                           </div>`
+                        : '-';
+                  }
+               },
+               {
                   title: 'Tutup Pendaftaran',
                   field: 'close_registration',
                   sortable: true
