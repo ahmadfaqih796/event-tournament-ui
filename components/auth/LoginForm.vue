@@ -48,7 +48,12 @@ const onSubmit = async () => {
                 </div>
             </v-col> -->
             <v-col cols="12" class="pt-0">
-                <v-btn type="submit" color="primary" size="large" block flat>Sign in</v-btn>
+                <v-btn :loading="loading" :disabled="loading" type="submit" color="primary" size="large" block flat>{{ loading ? 'Loading' : 'Login' }}</v-btn>
+            </v-col>
+            <v-col cols="12" class="pt-0">
+                <div style="color: red; text-align: center">
+                   {{ error }}
+                </div>
             </v-col>
         </v-row>
     </v-form>
